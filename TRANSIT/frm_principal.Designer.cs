@@ -31,22 +31,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frm_principal));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.dataLayoutControl1 = new DevExpress.XtraDataLayout.DataLayoutControl();
-            this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
             this.btn_save = new DevExpress.XtraEditors.SimpleButton();
             this.btn_lancer = new DevExpress.XtraEditors.SimpleButton();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ckTous = new DevExpress.XtraEditors.CheckEdit();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
-            this.dtDate2 = new System.Windows.Forms.DateTimePicker();
-            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
-            this.dtDate1 = new System.Windows.Forms.DateTimePicker();
             this.cmbBase1 = new System.Windows.Forms.ComboBox();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.btn_lister = new DevExpress.XtraEditors.SimpleButton();
@@ -60,24 +52,26 @@
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.txtTDD = new DevExpress.XtraEditors.TextEdit();
+            this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
             this.dataLayoutControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ckTous.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -89,39 +83,29 @@
             this.layoutControl1.Location = new System.Drawing.Point(0, 0);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.Root;
-            this.layoutControl1.Size = new System.Drawing.Size(1484, 789);
+            this.layoutControl1.Size = new System.Drawing.Size(1484, 747);
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
             // dataLayoutControl1
             // 
-            this.dataLayoutControl1.Controls.Add(this.progressBarControl1);
+            this.dataLayoutControl1.Controls.Add(this.txtTDD);
             this.dataLayoutControl1.Controls.Add(this.btn_save);
             this.dataLayoutControl1.Controls.Add(this.btn_lancer);
-            this.dataLayoutControl1.Location = new System.Drawing.Point(12, 191);
+            this.dataLayoutControl1.Controls.Add(this.btn_lister);
+            this.dataLayoutControl1.Location = new System.Drawing.Point(12, 137);
             this.dataLayoutControl1.Name = "dataLayoutControl1";
             this.dataLayoutControl1.Root = this.layoutControlGroup1;
-            this.dataLayoutControl1.Size = new System.Drawing.Size(1460, 67);
+            this.dataLayoutControl1.Size = new System.Drawing.Size(1460, 89);
             this.dataLayoutControl1.TabIndex = 6;
             this.dataLayoutControl1.Text = "dataLayoutControl1";
-            progressBarControl1.Enabled = false;
-            // 
-            // progressBarControl1
-            // 
-            this.progressBarControl1.Enabled = false;
-            this.progressBarControl1.Location = new System.Drawing.Point(12, 43);
-            this.progressBarControl1.Name = "progressBarControl1";
-            this.progressBarControl1.Size = new System.Drawing.Size(1186, 12);
-            this.progressBarControl1.StyleController = this.dataLayoutControl1;
-            this.progressBarControl1.TabIndex = 20;
-            this.progressBarControl1.Visible = false;
             // 
             // btn_save
             // 
             this.btn_save.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_save.Appearance.Options.UseFont = true;
             this.btn_save.Enabled = false;
-            this.btn_save.Location = new System.Drawing.Point(1202, 20);
+            this.btn_save.Location = new System.Drawing.Point(1202, 46);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(246, 27);
             this.btn_save.StyleController = this.dataLayoutControl1;
@@ -134,7 +118,7 @@
             this.btn_lancer.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_lancer.Appearance.Options.UseFont = true;
             this.btn_lancer.Enabled = false;
-            this.btn_lancer.Location = new System.Drawing.Point(12, 12);
+            this.btn_lancer.Location = new System.Drawing.Point(12, 46);
             this.btn_lancer.Name = "btn_lancer";
             this.btn_lancer.Size = new System.Drawing.Size(1186, 27);
             this.btn_lancer.StyleController = this.dataLayoutControl1;
@@ -149,9 +133,10 @@
             this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem5,
             this.layoutControlItem6,
-            this.layoutControlItem3});
+            this.layoutControlItem7,
+            this.layoutControlItem8});
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(1460, 67);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(1460, 89);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItem5
@@ -159,9 +144,9 @@
             this.layoutControlItem5.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.layoutControlItem5.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem5.Control = this.btn_lancer;
-            this.layoutControlItem5.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem5.Location = new System.Drawing.Point(0, 31);
             this.layoutControlItem5.Name = "layoutControlItem5";
-            this.layoutControlItem5.Size = new System.Drawing.Size(1190, 31);
+            this.layoutControlItem5.Size = new System.Drawing.Size(1190, 38);
             this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem5.TextVisible = false;
             // 
@@ -170,46 +155,31 @@
             this.layoutControlItem6.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem6.Control = this.btn_save;
-            this.layoutControlItem6.Location = new System.Drawing.Point(1190, 0);
+            this.layoutControlItem6.Location = new System.Drawing.Point(1190, 31);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(250, 47);
+            this.layoutControlItem6.Size = new System.Drawing.Size(250, 38);
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
-            // 
-            // layoutControlItem3
-            // 
-            this.layoutControlItem3.Control = this.progressBarControl1;
-            this.layoutControlItem3.Location = new System.Drawing.Point(0, 31);
-            this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(1190, 16);
-            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem3.TextVisible = false;
             // 
             // dgSource
             // 
             this.dgSource.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgSource.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSource.Location = new System.Drawing.Point(28, 262);
+            this.dgSource.Location = new System.Drawing.Point(28, 230);
             this.dgSource.Name = "dgSource";
             this.dgSource.ReadOnly = true;
             this.dgSource.RowHeadersWidth = 51;
             this.dgSource.RowTemplate.Height = 24;
             this.dgSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgSource.Size = new System.Drawing.Size(1444, 515);
+            this.dgSource.Size = new System.Drawing.Size(1444, 505);
             this.dgSource.TabIndex = 0;
             // 
             // groupControl1
             // 
-            this.groupControl1.Controls.Add(this.groupBox1);
             this.groupControl1.Controls.Add(this.lblrecup);
-            this.groupControl1.Controls.Add(this.labelControl6);
-            this.groupControl1.Controls.Add(this.dtDate2);
-            this.groupControl1.Controls.Add(this.labelControl5);
-            this.groupControl1.Controls.Add(this.dtDate1);
             this.groupControl1.Controls.Add(this.cmbBase1);
             this.groupControl1.Controls.Add(this.labelControl4);
-            this.groupControl1.Controls.Add(this.btn_lister);
             this.groupControl1.Controls.Add(this.cmbBase);
             this.groupControl1.Controls.Add(this.drpdestinataire);
             this.groupControl1.Controls.Add(this.drpsource);
@@ -218,33 +188,9 @@
             this.groupControl1.Controls.Add(this.labelControl1);
             this.groupControl1.Location = new System.Drawing.Point(12, 12);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(1460, 175);
+            this.groupControl1.Size = new System.Drawing.Size(1460, 121);
             this.groupControl1.TabIndex = 4;
             this.groupControl1.Text = "Options";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.ckTous);
-            this.groupBox1.Location = new System.Drawing.Point(881, 53);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(567, 115);
-            this.groupBox1.TabIndex = 19;
-            this.groupBox1.TabStop = false;
-            // 
-            // ckTous
-            // 
-            this.ckTous.Enabled = false;
-            this.ckTous.Location = new System.Drawing.Point(14, 49);
-            this.ckTous.Name = "ckTous";
-            this.ckTous.Properties.Appearance.BackColor = System.Drawing.Color.IndianRed;
-            this.ckTous.Properties.Appearance.Font = new System.Drawing.Font("Verdana", 7.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckTous.Properties.Appearance.ForeColor = System.Drawing.Color.AliceBlue;
-            this.ckTous.Properties.Appearance.Options.UseBackColor = true;
-            this.ckTous.Properties.Appearance.Options.UseFont = true;
-            this.ckTous.Properties.Appearance.Options.UseForeColor = true;
-            this.ckTous.Properties.Caption = "Les données reste telles qu\'elles sont et  sont regroupées dans un seul LOT";
-            this.ckTous.Size = new System.Drawing.Size(547, 24);
-            this.ckTous.TabIndex = 0;
             // 
             // lblrecup
             // 
@@ -253,42 +199,6 @@
             this.lblrecup.Size = new System.Drawing.Size(0, 16);
             this.lblrecup.TabIndex = 18;
             this.lblrecup.Visible = false;
-            // 
-            // labelControl6
-            // 
-            this.labelControl6.Location = new System.Drawing.Point(389, 143);
-            this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(15, 16);
-            this.labelControl6.TabIndex = 17;
-            this.labelControl6.Text = "Au";
-            // 
-            // dtDate2
-            // 
-            this.dtDate2.Enabled = false;
-            this.dtDate2.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtDate2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtDate2.Location = new System.Drawing.Point(444, 138);
-            this.dtDate2.Name = "dtDate2";
-            this.dtDate2.Size = new System.Drawing.Size(200, 23);
-            this.dtDate2.TabIndex = 16;
-            // 
-            // labelControl5
-            // 
-            this.labelControl5.Location = new System.Drawing.Point(115, 145);
-            this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(15, 16);
-            this.labelControl5.TabIndex = 15;
-            this.labelControl5.Text = "Du";
-            // 
-            // dtDate1
-            // 
-            this.dtDate1.Enabled = false;
-            this.dtDate1.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtDate1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtDate1.Location = new System.Drawing.Point(150, 138);
-            this.dtDate1.Name = "dtDate1";
-            this.dtDate1.Size = new System.Drawing.Size(200, 23);
-            this.dtDate1.TabIndex = 14;
             // 
             // cmbBase1
             // 
@@ -314,11 +224,12 @@
             this.btn_lister.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_lister.Appearance.Options.UseFont = true;
             this.btn_lister.Enabled = false;
-            this.btn_lister.Location = new System.Drawing.Point(667, 134);
+            this.btn_lister.Location = new System.Drawing.Point(1385, 12);
             this.btn_lister.Name = "btn_lister";
-            this.btn_lister.Size = new System.Drawing.Size(183, 34);
+            this.btn_lister.Size = new System.Drawing.Size(63, 27);
+            this.btn_lister.StyleController = this.dataLayoutControl1;
             this.btn_lister.TabIndex = 11;
-            this.btn_lister.Text = "Lister les données";
+            this.btn_lister.Text = "Afficher";
             this.btn_lister.Click += new System.EventHandler(this.btn_lister_Click);
             // 
             // cmbBase
@@ -388,7 +299,7 @@
             this.layoutControlItem2,
             this.layoutControlItem4});
             this.Root.Name = "Root";
-            this.Root.Size = new System.Drawing.Size(1484, 789);
+            this.Root.Size = new System.Drawing.Size(1484, 747);
             this.Root.TextVisible = false;
             // 
             // layoutControlItem1
@@ -396,34 +307,63 @@
             this.layoutControlItem1.Control = this.groupControl1;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(1464, 179);
+            this.layoutControlItem1.Size = new System.Drawing.Size(1464, 125);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
             // layoutControlItem2
             // 
             this.layoutControlItem2.Control = this.dgSource;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 250);
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 218);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 519);
+            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 509);
             this.layoutControlItem2.Text = " ";
             this.layoutControlItem2.TextSize = new System.Drawing.Size(4, 16);
             // 
             // layoutControlItem4
             // 
             this.layoutControlItem4.Control = this.dataLayoutControl1;
-            this.layoutControlItem4.Location = new System.Drawing.Point(0, 179);
+            this.layoutControlItem4.Location = new System.Drawing.Point(0, 125);
             this.layoutControlItem4.Name = "layoutControlItem4";
-            this.layoutControlItem4.Size = new System.Drawing.Size(1464, 71);
+            this.layoutControlItem4.Size = new System.Drawing.Size(1464, 93);
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
+            // 
+            // txtTDD
+            // 
+            this.txtTDD.Location = new System.Drawing.Point(48, 14);
+            this.txtTDD.Name = "txtTDD";
+            this.txtTDD.Size = new System.Drawing.Size(1333, 22);
+            this.txtTDD.StyleController = this.dataLayoutControl1;
+            this.txtTDD.TabIndex = 21;
+            this.txtTDD.EditValueChanged += new System.EventHandler(this.txtTDD_EditValueChanged);
+            // 
+            // layoutControlItem7
+            // 
+            this.layoutControlItem7.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.layoutControlItem7.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
+            this.layoutControlItem7.Control = this.txtTDD;
+            this.layoutControlItem7.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem7.Name = "layoutControlItem7";
+            this.layoutControlItem7.Size = new System.Drawing.Size(1373, 31);
+            this.layoutControlItem7.Text = "TDD";
+            this.layoutControlItem7.TextSize = new System.Drawing.Size(24, 16);
+            // 
+            // layoutControlItem8
+            // 
+            this.layoutControlItem8.Control = this.btn_lister;
+            this.layoutControlItem8.Location = new System.Drawing.Point(1373, 0);
+            this.layoutControlItem8.Name = "layoutControlItem8";
+            this.layoutControlItem8.Size = new System.Drawing.Size(67, 31);
+            this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem8.TextVisible = false;
             // 
             // frm_principal
             // 
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1484, 789);
+            this.ClientSize = new System.Drawing.Size(1484, 747);
             this.Controls.Add(this.layoutControl1);
             this.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IconOptions.Image = ((System.Drawing.Image)(resources.GetObject("frm_principal.IconOptions.Image")));
@@ -436,21 +376,20 @@
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).EndInit();
             this.dataLayoutControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
             this.groupControl1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ckTous.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -479,15 +418,10 @@
         private DevExpress.XtraEditors.SimpleButton btn_lister;
         private System.Windows.Forms.ComboBox cmbBase1;
         private DevExpress.XtraEditors.LabelControl labelControl4;
-        private System.Windows.Forms.DateTimePicker dtDate1;
-        private DevExpress.XtraEditors.LabelControl labelControl5;
-        private DevExpress.XtraEditors.LabelControl labelControl6;
-        private System.Windows.Forms.DateTimePicker dtDate2;
         public DevExpress.XtraEditors.LabelControl lblrecup;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private DevExpress.XtraEditors.CheckEdit ckTous;
-        private DevExpress.XtraEditors.ProgressBarControl progressBarControl1;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
+        private DevExpress.XtraEditors.TextEdit txtTDD;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem7;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
     }
 }
 

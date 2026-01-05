@@ -22,9 +22,17 @@ namespace TRANSIT
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            _frmParent.lblrecup.Text = "";
-            _frmParent.lblrecup.Text = txttype.Text +";"+txtligne.Text+";"+txtqte1.Text+";"+txtLot.Text;
-            this.Close();
+            if (string.IsNullOrWhiteSpace(txtqte1.Text) || string.IsNullOrWhiteSpace(txtLot.Text))
+            {
+                MessageBox.Show("La quantité ou le nom du lot ne peut pas être vide !!!!","Message d'erreur",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                _frmParent.lblrecup.Text = "";
+                _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";" + txtLot.Text;
+                this.Close();
+            }
         }
 
         private void frmLotSerie_Load(object sender, EventArgs e)

@@ -1,4 +1,6 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using static DevExpress.XtraEditors.RoundedSkinPanel;
-using DevExpress.XtraEditors;
 
 namespace TRANSIT
 {
@@ -22,6 +23,7 @@ namespace TRANSIT
         string connectionSource = "";
         string connectionDestinataire = "";
         string connectionSource1 = "";
+        string connectionSource2 = "";
 
         public frm_principal()
         {
@@ -65,8 +67,10 @@ namespace TRANSIT
             drpdestinataire.Refresh();
             drpsource.Refresh();
 
-            //drpsource_DropDownClosed(sender, e);
-            //drpdestinataire_DropDownClosed(sender, e);
+            drpsource_DropDownClosed(sender, e);
+            drpdestinataire_DropDownClosed(sender, e);
+
+            txtTDD.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
         }
 
         private void cmbBase_DropDownClosed(object sender, EventArgs e)
@@ -126,14 +130,10 @@ namespace TRANSIT
             if (dt.Rows.Count > 0)
             {
                 cmb.Enabled = true;
-                dtDate1.Enabled = true;
-                dtDate2.Enabled = true;
             }
             else
             {
                 cmb.Enabled = false;
-                dtDate1.Enabled = false;
-                dtDate2.Enabled = false;
             }
 
             con.Close();
@@ -164,7 +164,20 @@ namespace TRANSIT
             connectionSource1 = $"Server={source};Database={baseName};" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
-            load_data();
+
+            string baseName1 = cmbBase1.SelectedValue?.ToString();
+            connectionSource2 = $"Server={destinataire};Database={baseName1};" +
+                                                    $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
+                                                    $"Connection Timeout=240;";
+
+            if (!txtTDD.Text.StartsWith("MS"))
+            {
+                MessageBox.Show("Ce n'est pas un mouvement de sortie!!!!","Message d'erreur",MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                load_data();
+            }
         }
 
         private void load_data()
@@ -172,8 +185,6 @@ namespace TRANSIT
             dgSource.DataSource = null;
             DataTable dt = new DataTable();
 
-            DateTime dt1 = dtDate1.Value;
-            DateTime dt2 = dtDate2.Value;
 
             try
             {
@@ -181,33 +192,34 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    /*string query = @"SELECT doc.DO_Type,doc.DO_Piece, doc.Do_Date, doc.AR_Ref, FORMAT(doc.DL_Qte, 'N0') AS DL_Qte, doc.DL_Design, f.DE_Intitule ,lot.LS_PEREMPTION
-                        FROM F_DOCLIGNE AS doc 
-                        INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No 
-                        LEFT JOIN F_LOTSERIE AS lot ON lot.DL_NoIn = doc.DL_No AND lot.AR_Ref = doc.AR_Ref
-                        WHERE doc.DO_Type = 21 
-                          AND doc.DO_Piece LIKE 'MS%' 
-                          AND doc.DO_DATE BETWEEN @DateDebut AND @DateFin 
-                          AND doc.DL_Qte IS NOT NULL AND doc.DL_Qte <> 0
-                        ORDER BY doc.Do_Piece ASC";*/
-
-                    string query = @"SELECT doc.DO_Type,doc.DO_Piece, doc.Do_Date, doc.AR_Ref, FORMAT(doc.DL_Qte, 'N0') AS DL_Qte, doc.DL_Design, f.DE_Intitule
-                        FROM F_DOCLIGNE AS doc 
-                        INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No 
-                        WHERE doc.DO_Type = 21 
-                          AND doc.DO_Piece LIKE 'MS%' 
-                          AND doc.DO_DATE BETWEEN @DateDebut AND @DateFin 
-                          AND doc.DL_Qte IS NOT NULL AND doc.DL_Qte <> 0
-                        ORDER BY doc.Do_Piece ASC";
+                    string query = @"
+                    SELECT 
+                        doc.DO_Type,
+                        doc.DO_Piece,
+                        FORMAT(doc.DO_Date, 'yyMMdd') AS DO_Date,
+                        doc.AR_Ref,
+                        CAST(doc.DL_Qte AS INT) AS DL_Qte,
+                        doc.DL_Design,
+                        lot.LS_NoSerie,
+                        f.DE_Intitule,
+                        lot.LS_PEREMPTION
+                    FROM F_DOCLIGNE AS doc
+                    INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
+                    LEFT JOIN F_LOTSERIE AS lot 
+                        ON lot.DL_NoIn = doc.DL_No 
+                       AND lot.AR_Ref = doc.AR_Ref
+                    WHERE doc.DO_Piece = @DoPiece
+                      AND doc.DL_Qte IS NOT NULL
+                      AND doc.DL_Qte <> 0";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
-                        // Ajout des paramètres
-                        cmd.Parameters.AddWithValue("@DateDebut", dt1.Date);
-                        cmd.Parameters.AddWithValue("@DateFin", dt2.Date);
+                        // 🔐 PARAMÈTRE SÉCURISÉ
+                        cmd.Parameters.Add("@DoPiece", SqlDbType.VarChar).Value = txtTDD.Text.Trim();
 
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
+                            dt.Clear();
                             da.Fill(dt);
                         }
                     }
@@ -219,33 +231,21 @@ namespace TRANSIT
                 dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
                 dgSource.Columns["Do_Date"].HeaderText = "Date";
                 dgSource.Columns["AR_Ref"].HeaderText = "Référence";
-                dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
                 dgSource.Columns["DL_Design"].HeaderText = "Désignation";
+                dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
+                dgSource.Columns["LS_NoSerie"].HeaderText = "Lot";
                 dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt";
-                //dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
-
-                DataGridViewTextBoxColumn colLot = new DataGridViewTextBoxColumn();
-                colLot.Name = "LOT";
-                colLot.HeaderText = "LOT";
-                colLot.Width = 100; // Ajustez la largeur selon vos besoins
-
-                // Insérer la colonne après "Quantité" (à l'index de DL_Design)
-                int indexDesignation = dgSource.Columns["DL_Design"].Index;
-                dgSource.Columns.Insert(indexDesignation, colLot);
+                dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
 
                 if (dt.Rows.Count == 0)
                 {
                     btn_lancer.Enabled = false;
-                    btn_save.Enabled = false;
-                    ckTous.Enabled = false;
 
                     MessageBox.Show("Aucune donnée trouvée pour la période sélectionnée.");
                 }
                 else
                 {
-                    ckTous.Enabled = true;
                     btn_lancer.Enabled = true;
-                    btn_save.Enabled = true;
 
                     if (dgSource.Columns.Contains("DL_Qte"))
                     {
@@ -267,94 +267,49 @@ namespace TRANSIT
 
         private void btn_lancer_Click(object sender, EventArgs e)
         {
-            int total = dgSource.Rows.Count-1;
-            progressBarControl1.Properties.Minimum = 0;
-            progressBarControl1.Properties.Maximum = total; // nombre total de lignes
-            progressBarControl1.Position = 0; // départ
-
             if (dgSource.Rows.Count > 0)
             {
-                progressBarControl1.Enabled = true;
-                if (ckTous.Checked)
+                for (int i = 0; i < dgSource.Rows.Count-1; i++)
                 {
-                    string lot = XtraInputBox.Show(
-                        "Saisir le lot",
-                        "Lot",
-                        ""
-                    );
-
-                    if (string.IsNullOrWhiteSpace(lot))
+                    if (i > 0 && i < dgSource.Rows.Count-1)
                     {
-                        XtraMessageBox.Show(
-                            "Le lot est obligatoire",
-                            "Attention",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
-                        );
-                        lot = XtraInputBox.Show(
-                        "Saisir le lot",
-                        "Lot",
-                        ""
-                        ); 
+                        dgSource.Rows[i - 1].Selected = false;
+                        dgSource.Rows[i].Selected = true;
                     }
 
-                    for (int i = 0; i < dgSource.Rows.Count-1; i++)
+                    frm_traitement frm_trait = new frm_traitement(this);
+                    frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
+                    frm_trait.txttype.Text = "20";
+                    frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[5].Value.ToString();
+                    frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[4].Value.ToString();
+                    frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
+                    frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
+                    frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1);
+                    string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
+
+                    if (string.IsNullOrWhiteSpace(cellValue))
                     {
-                        if (i > 0 && i < dgSource.Rows.Count-1)
-                        {
-                            dgSource.Rows[i - 1].Selected = false;
-                            dgSource.Rows[i].Selected = true;
-                        }
-
-                        dgSource.Rows[i].Cells[0].Value = 20;
-                        dgSource.Rows[i].Cells[1].Value = "ME" + recuperer_last_numero(i + 1);
-                        dgSource.Rows[i].Cells[5].Value = lot;
-
-                        progressBarControl1.Position = i + 1;
-                        Application.DoEvents();
+                        frm_trait.txtLot.Text = "LOT" +
+                            new string(txtTDD.Text.Where(char.IsDigit).ToArray());
                     }
-
-                    progressBarControl1.Enabled = false;
-                    progressBarControl1.Position = 0;
-
-                    dgSource.Refresh();
-                }
-                else
-                {
-                    for (int i = 0; i < dgSource.Rows.Count-1; i++)
+                    else
                     {
-                        if (i > 0 && i < dgSource.Rows.Count-1)
-                        {
-                            dgSource.Rows[i - 1].Selected = false;
-                            dgSource.Rows[i].Selected = true;
-                        }
-
-                        frm_traitement frm_trait = new frm_traitement(this);
-                        frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
-                        frm_trait.txttype.Text = "20";
-                        frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[6].Value.ToString();
-                        frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[4].Value.ToString();
-                        frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
-                        frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
-                        frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1);
-                        frm_trait.txtLigne1.Text = i.ToString();
-                        frm_trait.ShowDialog();
-
-                        string[] recup = lblrecup.Text.ToString().Split(';');
-
-                        dgSource.Rows[i].Cells[0].Value = recup[0];
-                        dgSource.Rows[i].Cells[1].Value = recup[1];
-                        dgSource.Rows[i].Cells[4].Value = recup[2];
-                        dgSource.Rows[i].Cells[5].Value = recup[3];
-
-                        progressBarControl1.Position = i + 1;
-                        Application.DoEvents();
+                        frm_trait.txtLot.Text = cellValue;
                     }
+                    frm_trait.ShowDialog();
 
-                    progressBarControl1.Enabled = false;
-                    progressBarControl1.Position = 0;
+                    string[] recup = lblrecup.Text.ToString().Split(';');
+
+                    dgSource.Rows[i].Cells[0].Value = recup[0];
+                    dgSource.Rows[i].Cells[1].Value = recup[1];
+                    dgSource.Rows[i].Cells[4].Value = recup[2];
+                    dgSource.Rows[i].Cells[6].Value = recup[3];
+
+                    Application.DoEvents();
                 }
             }
+
+            btn_save.Enabled = true;
         }
 
         private string recuperer_last_numero(int cond)
@@ -362,7 +317,7 @@ namespace TRANSIT
             string rec = "";
             try
             {
-                using (SqlConnection con = new SqlConnection(connectionSource1))
+                using (SqlConnection con = new SqlConnection(connectionSource2))
                 {
                     con.Open();
 
@@ -373,7 +328,8 @@ namespace TRANSIT
                         object result = cmd.ExecuteScalar();
                         if (result != null)
                         {
-                            int k = int.Parse(result.ToString().Replace("ME", "").Trim())+cond;
+                            string results = new string(result.ToString().Where(char.IsDigit).ToArray());
+                            int k = int.Parse(results)+cond;
                             rec = k.ToString();
                         }
                     }
@@ -436,6 +392,11 @@ namespace TRANSIT
             {
                 MessageBox.Show($"Erreur lors de l'export : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void txtTDD_EditValueChanged(object sender, EventArgs e)
+        {
+            dgSource.DataSource = null;
         }
     }
 }
