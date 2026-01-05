@@ -30,18 +30,22 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frm_principal));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.btnPrint = new DevExpress.XtraEditors.SimpleButton();
             this.dataLayoutControl1 = new DevExpress.XtraDataLayout.DataLayoutControl();
+            this.txtTDD = new DevExpress.XtraEditors.TextEdit();
             this.btn_save = new DevExpress.XtraEditors.SimpleButton();
             this.btn_lancer = new DevExpress.XtraEditors.SimpleButton();
+            this.btn_lister = new DevExpress.XtraEditors.SimpleButton();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
             this.cmbBase1 = new System.Windows.Forms.ComboBox();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
-            this.btn_lister = new DevExpress.XtraEditors.SimpleButton();
             this.cmbBase = new System.Windows.Forms.ComboBox();
             this.drpdestinataire = new System.Windows.Forms.ComboBox();
             this.drpsource = new System.Windows.Forms.ComboBox();
@@ -52,16 +56,17 @@
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.txtTDD = new DevExpress.XtraEditors.TextEdit();
-            this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
             this.dataLayoutControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
@@ -69,13 +74,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
             // 
+            this.layoutControl1.Controls.Add(this.btnPrint);
             this.layoutControl1.Controls.Add(this.dataLayoutControl1);
             this.layoutControl1.Controls.Add(this.dgSource);
             this.layoutControl1.Controls.Add(this.groupControl1);
@@ -86,6 +90,18 @@
             this.layoutControl1.Size = new System.Drawing.Size(1484, 747);
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
+            // 
+            // btnPrint
+            // 
+            this.btnPrint.Enabled = false;
+            this.btnPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
+            this.btnPrint.Location = new System.Drawing.Point(12, 230);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
+            this.btnPrint.Size = new System.Drawing.Size(1460, 91);
+            this.btnPrint.StyleController = this.layoutControl1;
+            this.btnPrint.TabIndex = 7;
+            this.btnPrint.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // dataLayoutControl1
             // 
@@ -99,6 +115,15 @@
             this.dataLayoutControl1.Size = new System.Drawing.Size(1460, 89);
             this.dataLayoutControl1.TabIndex = 6;
             this.dataLayoutControl1.Text = "dataLayoutControl1";
+            // 
+            // txtTDD
+            // 
+            this.txtTDD.Location = new System.Drawing.Point(48, 14);
+            this.txtTDD.Name = "txtTDD";
+            this.txtTDD.Size = new System.Drawing.Size(1333, 22);
+            this.txtTDD.StyleController = this.dataLayoutControl1;
+            this.txtTDD.TabIndex = 21;
+            this.txtTDD.EditValueChanged += new System.EventHandler(this.txtTDD_EditValueChanged);
             // 
             // btn_save
             // 
@@ -125,6 +150,19 @@
             this.btn_lancer.TabIndex = 9;
             this.btn_lancer.Text = "Lancer le traitement ...";
             this.btn_lancer.Click += new System.EventHandler(this.btn_lancer_Click);
+            // 
+            // btn_lister
+            // 
+            this.btn_lister.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_lister.Appearance.Options.UseFont = true;
+            this.btn_lister.Enabled = false;
+            this.btn_lister.Location = new System.Drawing.Point(1385, 12);
+            this.btn_lister.Name = "btn_lister";
+            this.btn_lister.Size = new System.Drawing.Size(63, 27);
+            this.btn_lister.StyleController = this.dataLayoutControl1;
+            this.btn_lister.TabIndex = 11;
+            this.btn_lister.Text = "Afficher";
+            this.btn_lister.Click += new System.EventHandler(this.btn_lister_Click);
             // 
             // layoutControlGroup1
             // 
@@ -161,18 +199,38 @@
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
             // 
+            // layoutControlItem7
+            // 
+            this.layoutControlItem7.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.layoutControlItem7.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
+            this.layoutControlItem7.Control = this.txtTDD;
+            this.layoutControlItem7.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem7.Name = "layoutControlItem7";
+            this.layoutControlItem7.Size = new System.Drawing.Size(1373, 31);
+            this.layoutControlItem7.Text = "TDD";
+            this.layoutControlItem7.TextSize = new System.Drawing.Size(24, 16);
+            // 
+            // layoutControlItem8
+            // 
+            this.layoutControlItem8.Control = this.btn_lister;
+            this.layoutControlItem8.Location = new System.Drawing.Point(1373, 0);
+            this.layoutControlItem8.Name = "layoutControlItem8";
+            this.layoutControlItem8.Size = new System.Drawing.Size(67, 31);
+            this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem8.TextVisible = false;
+            // 
             // dgSource
             // 
             this.dgSource.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgSource.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSource.Location = new System.Drawing.Point(28, 230);
+            this.dgSource.Location = new System.Drawing.Point(28, 325);
             this.dgSource.Name = "dgSource";
             this.dgSource.ReadOnly = true;
             this.dgSource.RowHeadersWidth = 51;
             this.dgSource.RowTemplate.Height = 24;
             this.dgSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgSource.Size = new System.Drawing.Size(1444, 505);
+            this.dgSource.Size = new System.Drawing.Size(1444, 410);
             this.dgSource.TabIndex = 0;
             // 
             // groupControl1
@@ -218,19 +276,6 @@
             this.labelControl4.Size = new System.Drawing.Size(117, 16);
             this.labelControl4.TabIndex = 12;
             this.labelControl4.Text = "Nom de la base dest";
-            // 
-            // btn_lister
-            // 
-            this.btn_lister.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_lister.Appearance.Options.UseFont = true;
-            this.btn_lister.Enabled = false;
-            this.btn_lister.Location = new System.Drawing.Point(1385, 12);
-            this.btn_lister.Name = "btn_lister";
-            this.btn_lister.Size = new System.Drawing.Size(63, 27);
-            this.btn_lister.StyleController = this.dataLayoutControl1;
-            this.btn_lister.TabIndex = 11;
-            this.btn_lister.Text = "Afficher";
-            this.btn_lister.Click += new System.EventHandler(this.btn_lister_Click);
             // 
             // cmbBase
             // 
@@ -297,7 +342,8 @@
             this.Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem1,
             this.layoutControlItem2,
-            this.layoutControlItem4});
+            this.layoutControlItem4,
+            this.layoutControlItem3});
             this.Root.Name = "Root";
             this.Root.Size = new System.Drawing.Size(1484, 747);
             this.Root.TextVisible = false;
@@ -314,9 +360,9 @@
             // layoutControlItem2
             // 
             this.layoutControlItem2.Control = this.dgSource;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 218);
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 313);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 509);
+            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 414);
             this.layoutControlItem2.Text = " ";
             this.layoutControlItem2.TextSize = new System.Drawing.Size(4, 16);
             // 
@@ -329,34 +375,17 @@
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
             // 
-            // txtTDD
+            // layoutControlItem3
             // 
-            this.txtTDD.Location = new System.Drawing.Point(48, 14);
-            this.txtTDD.Name = "txtTDD";
-            this.txtTDD.Size = new System.Drawing.Size(1333, 22);
-            this.txtTDD.StyleController = this.dataLayoutControl1;
-            this.txtTDD.TabIndex = 21;
-            this.txtTDD.EditValueChanged += new System.EventHandler(this.txtTDD_EditValueChanged);
-            // 
-            // layoutControlItem7
-            // 
-            this.layoutControlItem7.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.layoutControlItem7.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
-            this.layoutControlItem7.Control = this.txtTDD;
-            this.layoutControlItem7.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem7.Name = "layoutControlItem7";
-            this.layoutControlItem7.Size = new System.Drawing.Size(1373, 31);
-            this.layoutControlItem7.Text = "TDD";
-            this.layoutControlItem7.TextSize = new System.Drawing.Size(24, 16);
-            // 
-            // layoutControlItem8
-            // 
-            this.layoutControlItem8.Control = this.btn_lister;
-            this.layoutControlItem8.Location = new System.Drawing.Point(1373, 0);
-            this.layoutControlItem8.Name = "layoutControlItem8";
-            this.layoutControlItem8.Size = new System.Drawing.Size(67, 31);
-            this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem8.TextVisible = false;
+            this.layoutControlItem3.Control = this.btnPrint;
+            this.layoutControlItem3.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.layoutControlItem3.ImageOptions.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.True;
+            this.layoutControlItem3.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("layoutControlItem3.ImageOptions.Image")));
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 218);
+            this.layoutControlItem3.Name = "layoutControlItem3";
+            this.layoutControlItem3.Size = new System.Drawing.Size(1464, 95);
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem3.TextVisible = false;
             // 
             // frm_principal
             // 
@@ -376,9 +405,12 @@
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).EndInit();
             this.dataLayoutControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
@@ -387,9 +419,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTDD.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -422,6 +452,8 @@
         private DevExpress.XtraEditors.TextEdit txtTDD;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem7;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
+        private DevExpress.XtraEditors.SimpleButton btnPrint;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
     }
 }
 

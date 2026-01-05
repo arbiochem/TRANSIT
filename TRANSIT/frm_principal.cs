@@ -1,17 +1,22 @@
 ﻿using DevExpress.Internal.WinApi.Windows.UI.Notifications;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors;
+using DevExpress.XtraGrid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Forms;
 using static DevExpress.XtraEditors.RoundedSkinPanel;
+using PdfSharp.Drawing;
+using DevExpress.Utils.Extensions;
 
 namespace TRANSIT
 {
@@ -38,6 +43,7 @@ namespace TRANSIT
 
         private void frm_principal_Load(object sender, EventArgs e)
         {
+            btnPrint.AutoSize = true;
             drpsource.DataSource=null;
             drpdestinataire.DataSource = null;
 
@@ -196,10 +202,10 @@ namespace TRANSIT
                     SELECT 
                         doc.DO_Type,
                         doc.DO_Piece,
-                        FORMAT(doc.DO_Date, 'yyMMdd') AS DO_Date,
+                        FORMAT(doc.DO_Date, 'ddMMyy') AS DO_Date,
                         doc.AR_Ref,
-                        CAST(doc.DL_Qte AS INT) AS DL_Qte,
                         doc.DL_Design,
+                        CAST(doc.DL_Qte AS INT) AS DL_Qte,
                         lot.LS_NoSerie,
                         f.DE_Intitule,
                         lot.LS_PEREMPTION
@@ -228,6 +234,7 @@ namespace TRANSIT
                 dgSource.DataSource = dt;
 
                 dgSource.Columns["DO_Type"].HeaderText = "DO_Type";
+                dgSource.Columns["DO_Type"].Visible = false;
                 dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
                 dgSource.Columns["Do_Date"].HeaderText = "Date";
                 dgSource.Columns["AR_Ref"].HeaderText = "Référence";
@@ -246,6 +253,7 @@ namespace TRANSIT
                 else
                 {
                     btn_lancer.Enabled = true;
+                    btnPrint.Enabled = true;
 
                     if (dgSource.Columns.Contains("DL_Qte"))
                     {
@@ -267,6 +275,44 @@ namespace TRANSIT
 
         private void btn_lancer_Click(object sender, EventArgs e)
         {
+            TextEdit textEdit = new TextEdit();
+            textEdit.Properties.UseSystemPasswordChar = true; // 👈 mode password
+            textEdit.Properties.PasswordChar = '●'; // optionnel
+            textEdit.Width = 200;
+
+            // Arguments de l'InputBox
+            XtraInputBoxArgs args = new XtraInputBoxArgs();
+            args.Caption = "Mot de passe";
+            args.Prompt = "Entrez le mot de passe";
+            args.DefaultButtonIndex = 0;
+            args.Editor = textEdit;
+
+            // Affichage
+            string mdp = XtraInputBox.Show(args) as string;
+
+            // Vérification
+            while (string.IsNullOrEmpty(mdp))
+            {
+                XtraMessageBox.Show(
+                    "Mot de passe requis",
+                    "Attention",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                mdp = XtraInputBox.Show(args) as string;
+            }
+
+            while (mdp != "P@ssw0rd2026*")
+            {
+                XtraMessageBox.Show(
+                    "Mot de passe incorrect!!!",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                mdp = XtraInputBox.Show(args) as string;
+            }
+
             if (dgSource.Rows.Count > 0)
             {
                 for (int i = 0; i < dgSource.Rows.Count-1; i++)
@@ -280,21 +326,24 @@ namespace TRANSIT
                     frm_traitement frm_trait = new frm_traitement(this);
                     frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
                     frm_trait.txttype.Text = "20";
-                    frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[5].Value.ToString();
-                    frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[4].Value.ToString();
+                    frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
+                    frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
                     frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
                     frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
                     frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1);
+                    string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
                     string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
 
-                    if (string.IsNullOrWhiteSpace(cellValue))
-                    {
-                        frm_trait.txtLot.Text = "LOT" +
-                            new string(txtTDD.Text.Where(char.IsDigit).ToArray());
-                    }
-                    else
-                    {
-                        frm_trait.txtLot.Text = cellValue;
+                    if (!cellValues.StartsWith("MAT")){
+                        if (string.IsNullOrWhiteSpace(cellValue))
+                        {
+                            frm_trait.txtLot.Text = "LOT" +
+                                new string(txtTDD.Text.Where(char.IsDigit).ToArray());
+                        }
+                        else
+                        {
+                            frm_trait.txtLot.Text = cellValue;
+                        }
                     }
                     frm_trait.ShowDialog();
 
@@ -302,7 +351,7 @@ namespace TRANSIT
 
                     dgSource.Rows[i].Cells[0].Value = recup[0];
                     dgSource.Rows[i].Cells[1].Value = recup[1];
-                    dgSource.Rows[i].Cells[4].Value = recup[2];
+                    dgSource.Rows[i].Cells[5].Value = recup[2];
                     dgSource.Rows[i].Cells[6].Value = recup[3];
 
                     Application.DoEvents();
@@ -348,6 +397,44 @@ namespace TRANSIT
 
         private void btn_save_Click(object sender, EventArgs e)
         {
+            TextEdit textEdit = new TextEdit();
+            textEdit.Properties.UseSystemPasswordChar = true; // 👈 mode password
+            textEdit.Properties.PasswordChar = '●'; // optionnel
+            textEdit.Width = 200;
+
+            // Arguments de l'InputBox
+            XtraInputBoxArgs args = new XtraInputBoxArgs();
+            args.Caption = "Mot de passe";
+            args.Prompt = "Entrez le mot de passe";
+            args.DefaultButtonIndex = 0;
+            args.Editor = textEdit;
+
+            // Affichage
+            string mdp = XtraInputBox.Show(args) as string;
+
+            // Vérification
+            while (string.IsNullOrEmpty(mdp))
+            {
+                XtraMessageBox.Show(
+                    "Mot de passe requis",
+                    "Attention",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                mdp = XtraInputBox.Show(args) as string;
+            }
+
+            while (mdp!="P@ssw0rd2026*")
+            {
+                XtraMessageBox.Show(
+                    "Mot de passe incorrect!!!",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                mdp = XtraInputBox.Show(args) as string;
+            }
+
             try
             {
                 SaveFileDialog saveDialog = new SaveFileDialog();
@@ -367,8 +454,8 @@ namespace TRANSIT
                                 List<string> cells = new List<string>();
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
-                                    if (cell.OwningColumn.Visible)
-                                    {
+                                    /*if (cell.OwningColumn.Visible)
+                                    {*/
                                         if (cell.Value is DateTime dateValue)
                                         {
                                             // Format YYmmdd
@@ -378,7 +465,7 @@ namespace TRANSIT
                                         {
                                             cells.Add(cell.Value?.ToString() ?? "");
                                         }
-                                    }
+                                    //}
                                 }
                                 sw.WriteLine(string.Join(";", cells));
                             }
@@ -397,6 +484,112 @@ namespace TRANSIT
         private void txtTDD_EditValueChanged(object sender, EventArgs e)
         {
             dgSource.DataSource = null;
+            btnPrint.Enabled = false;
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            if (dgSource.DataSource == null)
+            {
+                XtraMessageBox.Show("Aucune donnée à imprimer");
+                return;
+            }
+
+            PrintDocument printDoc = new PrintDocument();
+            PrintPreviewDialog preview = new PrintPreviewDialog();
+
+            printDoc.DefaultPageSettings.Landscape = true;
+            printDoc.DefaultPageSettings.Margins = new Margins(30, 30, 40, 40);
+
+            int rowHeight = 28;
+
+            printDoc.PrintPage += (s, ev) =>
+            {
+                Graphics g = ev.Graphics;
+                Rectangle bounds = ev.MarginBounds;
+
+                int xStart = bounds.Left;
+                int y = bounds.Top;
+                int x;
+
+                Font headerFont = new Font("Arial", 10, FontStyle.Bold);
+                Font cellFont = new Font("Arial", 9);
+
+                StringFormat centerFormat = new StringFormat()
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center,
+                    Trimming = StringTrimming.EllipsisCharacter,
+                    FormatFlags = StringFormatFlags.NoWrap
+                };
+
+                // Largeur totale des colonnes visibles
+                int totalWidth = dgSource.Columns
+                    .Cast<DataGridViewColumn>()
+                    .Where(c => c.Visible)
+                    .Sum(c => c.Width);
+
+                float scale = (float)bounds.Width / totalWidth;
+
+                // ============ HEADERS ============
+                x = xStart;
+                foreach (DataGridViewColumn col in dgSource.Columns)
+                {
+                    if (!col.Visible) continue;
+
+                    int w = (int)(col.Width * scale);
+                    Rectangle rect = new Rectangle(x, y, w, rowHeight);
+
+                    g.FillRectangle(Brushes.LightGray, rect);
+                    g.DrawRectangle(Pens.Black, rect);
+                    g.DrawString(col.HeaderText, headerFont, Brushes.Black, rect, centerFormat);
+
+                    x += w;
+                }
+
+                y += rowHeight;
+
+                // ============ ROWS ============
+                foreach (DataGridViewRow row in dgSource.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    x = xStart;
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        if (!cell.OwningColumn.Visible) continue;
+
+                        int w = (int)(cell.OwningColumn.Width * scale);
+                        Rectangle rect = new Rectangle(x, y, w, rowHeight);
+
+                        g.DrawRectangle(Pens.Black, rect);
+                        g.DrawString(
+                            cell.Value?.ToString() ?? "",
+                            cellFont,
+                            Brushes.Black,
+                            rect,
+                            centerFormat
+                        );
+
+                        x += w;
+                    }
+
+                    y += rowHeight;
+
+                    // Pagination verticale
+                    if (y + rowHeight > bounds.Bottom)
+                    {
+                        ev.HasMorePages = true;
+                        return;
+                    }
+                }
+
+                ev.HasMorePages = false;
+            };
+
+            preview.Document = printDoc;
+            preview.WindowState = FormWindowState.Maximized;
+            preview.ShowDialog();
         }
     }
 }
