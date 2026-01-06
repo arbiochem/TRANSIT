@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using static DevExpress.XtraEditors.RoundedSkinPanel;
 using PdfSharp.Drawing;
 using DevExpress.Utils.Extensions;
+using DevExpress.ClipboardSource.SpreadsheetML;
 
 namespace TRANSIT
 {
@@ -27,8 +28,8 @@ namespace TRANSIT
         private string destinataire = "";
         string connectionSource = "";
         string connectionDestinataire = "";
-        string connectionSource1 = "";
-        string connectionSource2 = "";
+        public string connectionSource1 = "";
+        public string connectionSource2 = "";
 
         public frm_principal()
         {
@@ -50,6 +51,7 @@ namespace TRANSIT
             List<Serveurs> vpnList = new List<Serveurs>()
             {
                 //new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
+                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "SRV-ARB", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
@@ -57,6 +59,7 @@ namespace TRANSIT
 
             List<Serveurs> vpnLists = new List<Serveurs>()
             {
+                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
@@ -122,7 +125,8 @@ namespace TRANSIT
             using ( con= new SqlConnection(conns))
             {
                 con.Open();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
+                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
                 da.Fill(dt);
             }
 
@@ -168,11 +172,6 @@ namespace TRANSIT
         {
             string baseName = cmbBase.SelectedValue?.ToString();
             connectionSource1 = $"Server={source};Database={baseName};" +
-                                                    $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
-                                                    $"Connection Timeout=240;";
-
-            string baseName1 = cmbBase1.SelectedValue?.ToString();
-            connectionSource2 = $"Server={destinataire};Database={baseName1};" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
@@ -241,8 +240,71 @@ namespace TRANSIT
                 dgSource.Columns["DL_Design"].HeaderText = "Désignation";
                 dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
                 dgSource.Columns["LS_NoSerie"].HeaderText = "Lot";
-                dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt";
+                dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt source";
                 dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
+
+                DataGridViewTextBoxColumn coldest = new DataGridViewTextBoxColumn();
+                coldest.Name = "DEPOT_DEST";
+                coldest.HeaderText = "Dépôt Dest";
+                coldest.Width = 100;
+                coldest.ReadOnly = false;
+
+                // Vérifier que la colonne de référence existe
+                if (dgSource.Columns.Contains("DE_Intitule"))
+                {
+                    int index = dgSource.Columns["DE_Intitule"].Index + 1;
+                    dgSource.Columns.Insert(index, coldest);
+                }
+
+                // Remplir toutes les lignes existantes
+                foreach (DataGridViewRow row in dgSource.Rows)
+                {
+                    if (!row.IsNewRow)
+                    {
+                        row.Cells["DEPOT_DEST"].Value = cmbdepot.SelectedValue;
+                    }
+                }
+
+
+                DataGridViewTextBoxColumn colTiers = new DataGridViewTextBoxColumn();
+                colTiers.Name = "Tiers";
+                colTiers.HeaderText = "Tiers";
+                colTiers.Width = 100;
+                colTiers.DefaultCellStyle.NullValue = "1";
+                colTiers.Visible = false;
+
+                // Ajouter cet événement pour définir la valeur réelle
+                dgSource.DefaultValuesNeeded += (sender, e) =>
+                {
+                    if (e.Row.Cells[0].Value != null && !string.IsNullOrEmpty(e.Row.Cells[0].Value.ToString()))
+                    {
+                        e.Row.Cells["Tiers"].Value = "1";
+                    }
+                };
+
+                if (dgSource.Columns.Contains("LS_PEREMPTION"))
+                {
+                    int f = dgSource.Columns["LS_PEREMPTION"].Index + 1;
+                    dgSource.Columns.Insert(f, colTiers);
+                }
+
+                if (!dgSource.Columns.Contains("LOTSERIE"))
+                {
+                    DataGridViewTextBoxColumn colLot = new DataGridViewTextBoxColumn();
+                    colLot.Name = "LOTSERIE";
+                    colLot.HeaderText = "LOTSERIE";
+                    colLot.Width = 100;
+                    colLot.Visible = false;   // ou true selon ton besoin
+
+                    // Vérifier que la colonne de référence existe
+                    if (dgSource.Columns.Contains("LS_PEREMPTION"))
+                    {
+                        int index = dgSource.Columns["LS_PEREMPTION"].Index+2;
+                        dgSource.Columns.Insert(index, colLot);
+                    }
+ 
+                }
+
 
                 if (dt.Rows.Count == 0)
                 {
@@ -315,6 +377,7 @@ namespace TRANSIT
 
             if (dgSource.Rows.Count > 0)
             {
+                string recs = "";
                 for (int i = 0; i < dgSource.Rows.Count-1; i++)
                 {
                     if (i > 0 && i < dgSource.Rows.Count-1)
@@ -330,8 +393,17 @@ namespace TRANSIT
                     frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
                     frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
                     frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
-                    frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1);
-                    string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
+                    frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
+                    if (i == 0)
+                    {
+                        frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
+                        recs= "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
+                    }
+                    else
+                    {
+                        frm_trait.txtligne.Text = recs;
+                    }
+                        string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
                     string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
 
                     if (!cellValues.StartsWith("MAT")){
@@ -353,6 +425,7 @@ namespace TRANSIT
                     dgSource.Rows[i].Cells[1].Value = recup[1];
                     dgSource.Rows[i].Cells[5].Value = recup[2];
                     dgSource.Rows[i].Cells[6].Value = recup[3];
+                    dgSource.Rows[i].Cells[11].Value = recup[4];
 
                     Application.DoEvents();
                 }
@@ -444,7 +517,7 @@ namespace TRANSIT
 
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                 {
-                    using (StreamWriter sw = new StreamWriter(saveDialog.FileName, false, Encoding.UTF8))
+                    using (StreamWriter sw = new StreamWriter(saveDialog.FileName, false, Encoding.GetEncoding("Windows-1252")))
                     {
                         // Écrire les données
                         foreach (DataGridViewRow row in dgSource.Rows)
@@ -454,8 +527,8 @@ namespace TRANSIT
                                 List<string> cells = new List<string>();
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
-                                    /*if (cell.OwningColumn.Visible)
-                                    {*/
+                                    if (cell.ColumnIndex != 6 && cell.ColumnIndex != 7 && cell.ColumnIndex != 9)
+                                    {
                                         if (cell.Value is DateTime dateValue)
                                         {
                                             // Format YYmmdd
@@ -463,9 +536,16 @@ namespace TRANSIT
                                         }
                                         else
                                         {
-                                            cells.Add(cell.Value?.ToString() ?? "");
+                                            if (cell.ColumnIndex == 10)
+                                            {
+                                                cells.Add("1");
+                                            }
+                                            else
+                                            {
+                                                cells.Add(cell.Value?.ToString() ?? "");
+                                            }
                                         }
-                                    //}
+                                    }
                                 }
                                 sw.WriteLine(string.Join(";", cells));
                             }
@@ -483,6 +563,7 @@ namespace TRANSIT
 
         private void txtTDD_EditValueChanged(object sender, EventArgs e)
         {
+            dgSource.Columns.Clear();
             dgSource.DataSource = null;
             btnPrint.Enabled = false;
         }
@@ -590,6 +671,72 @@ namespace TRANSIT
             preview.Document = printDoc;
             preview.WindowState = FormWindowState.Maximized;
             preview.ShowDialog();
+        }
+
+        private void cmbBase1_DropDownClosed(object sender, EventArgs e)
+        {
+            cmbdepot.Enabled = true;
+
+            string baseName1 = cmbBase1.SelectedValue?.ToString();
+            connectionSource2 = $"Server={destinataire};Database={baseName1};" +
+                                                    $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
+                                                    $"Connection Timeout=240;";
+
+            loaddepot();
+        }
+
+        private void loaddepot()
+        {
+            cmbdepot.DataSource = null;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionSource2))
+                {
+                    con.Open();
+                    string query = "SELECT DISTINCT DE_Intitule FROM F_DEPOT ORDER BY DE_Intitule ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+
+                // Ajouter une ligne vide au début (optionnel)
+                DataRow emptyRow = dt.NewRow();
+                emptyRow["DE_Intitule"] = "";
+                dt.Rows.InsertAt(emptyRow, 0);
+
+                // Lier au ComboBox
+                cmbdepot.DataSource = dt;
+                cmbdepot.DisplayMember = "DE_Intitule";  // Ce qui s'affiche
+                cmbdepot.ValueMember = "DE_Intitule";    // La valeur récupérée
+
+                // Optionnel : Sélectionner le premier élément
+                if (cmbdepot.Items.Count > 0)
+                    cmbdepot.SelectedIndex = 0;
+            }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show($"Erreur SQL : {sqlEx.Message}\n\nDétails: {sqlEx.Number}",
+                                "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cmbdepot_DropDownClosed(object sender, EventArgs e)
+        {
+            if(cmbdepot.Text != "")
+            {
+                txtTDD.Enabled = true;
+            }
         }
     }
 }

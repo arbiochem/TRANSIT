@@ -57,6 +57,8 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.cmbdepot = new System.Windows.Forms.ComboBox();
+            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
@@ -94,7 +96,7 @@
             // btnPrint
             // 
             this.btnPrint.Enabled = false;
-            this.btnPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
+            this.btnPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.ImageOptions.Image")));
             this.btnPrint.Location = new System.Drawing.Point(12, 230);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
@@ -118,6 +120,7 @@
             // 
             // txtTDD
             // 
+            this.txtTDD.Enabled = false;
             this.txtTDD.Location = new System.Drawing.Point(48, 14);
             this.txtTDD.Name = "txtTDD";
             this.txtTDD.Size = new System.Drawing.Size(1333, 22);
@@ -235,6 +238,8 @@
             // 
             // groupControl1
             // 
+            this.groupControl1.Controls.Add(this.cmbdepot);
+            this.groupControl1.Controls.Add(this.labelControl5);
             this.groupControl1.Controls.Add(this.lblrecup);
             this.groupControl1.Controls.Add(this.cmbBase1);
             this.groupControl1.Controls.Add(this.labelControl4);
@@ -268,6 +273,7 @@
             this.cmbBase1.Name = "cmbBase1";
             this.cmbBase1.Size = new System.Drawing.Size(378, 24);
             this.cmbBase1.TabIndex = 13;
+            this.cmbBase1.DropDownClosed += new System.EventHandler(this.cmbBase1_DropDownClosed);
             // 
             // labelControl4
             // 
@@ -387,6 +393,26 @@
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             // 
+            // cmbdepot
+            // 
+            this.cmbdepot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbdepot.Enabled = false;
+            this.cmbdepot.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbdepot.FormattingEnabled = true;
+            this.cmbdepot.Location = new System.Drawing.Point(909, 85);
+            this.cmbdepot.Name = "cmbdepot";
+            this.cmbdepot.Size = new System.Drawing.Size(378, 24);
+            this.cmbdepot.TabIndex = 20;
+            this.cmbdepot.DropDownClosed += new System.EventHandler(this.cmbdepot_DropDownClosed);
+            // 
+            // labelControl5
+            // 
+            this.labelControl5.Location = new System.Drawing.Point(858, 93);
+            this.labelControl5.Name = "labelControl5";
+            this.labelControl5.Size = new System.Drawing.Size(33, 16);
+            this.labelControl5.TabIndex = 19;
+            this.labelControl5.Text = "Dépôt";
+            // 
             // frm_principal
             // 
             this.Appearance.Options.UseFont = true;
@@ -454,6 +480,8 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
         private DevExpress.XtraEditors.SimpleButton btnPrint;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
+        private System.Windows.Forms.ComboBox cmbdepot;
+        private DevExpress.XtraEditors.LabelControl labelControl5;
     }
 }
 
