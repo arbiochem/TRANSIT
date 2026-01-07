@@ -51,7 +51,7 @@ namespace TRANSIT
             List<Serveurs> vpnList = new List<Serveurs>()
             {
                 //new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
+                //new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "SRV-ARB", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
@@ -59,7 +59,7 @@ namespace TRANSIT
 
             List<Serveurs> vpnLists = new List<Serveurs>()
             {
-                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
+                //new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
@@ -125,8 +125,8 @@ namespace TRANSIT
             using ( con= new SqlConnection(conns))
             {
                 con.Open();
-                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
-                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
+                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
                 da.Fill(dt);
             }
 
@@ -207,9 +207,11 @@ namespace TRANSIT
                         CAST(doc.DL_Qte AS INT) AS DL_Qte,
                         lot.LS_NoSerie,
                         f.DE_Intitule,
-                        lot.LS_PEREMPTION
+                        lot.LS_PEREMPTION,
+                        tete.DO_Tiers
                     FROM F_DOCLIGNE AS doc
                     INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
+                    INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
                     LEFT JOIN F_LOTSERIE AS lot 
                         ON lot.DL_NoIn = doc.DL_No 
                        AND lot.AR_Ref = doc.AR_Ref
@@ -242,6 +244,8 @@ namespace TRANSIT
                 dgSource.Columns["LS_NoSerie"].HeaderText = "Lot";
                 dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt source";
                 dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
+                dgSource.Columns["Do_TIERS"].HeaderText = "TIERS";
+                dgSource.Columns["Do_TIERS"].Visible = false;
 
                 DataGridViewTextBoxColumn coldest = new DataGridViewTextBoxColumn();
                 coldest.Name = "DEPOT_DEST";
@@ -265,29 +269,6 @@ namespace TRANSIT
                     }
                 }
 
-
-                DataGridViewTextBoxColumn colTiers = new DataGridViewTextBoxColumn();
-                colTiers.Name = "Tiers";
-                colTiers.HeaderText = "Tiers";
-                colTiers.Width = 100;
-                colTiers.DefaultCellStyle.NullValue = "1";
-                colTiers.Visible = false;
-
-                // Ajouter cet événement pour définir la valeur réelle
-                dgSource.DefaultValuesNeeded += (sender, e) =>
-                {
-                    if (e.Row.Cells[0].Value != null && !string.IsNullOrEmpty(e.Row.Cells[0].Value.ToString()))
-                    {
-                        e.Row.Cells["Tiers"].Value = "1";
-                    }
-                };
-
-                if (dgSource.Columns.Contains("LS_PEREMPTION"))
-                {
-                    int f = dgSource.Columns["LS_PEREMPTION"].Index + 1;
-                    dgSource.Columns.Insert(f, colTiers);
-                }
-
                 if (!dgSource.Columns.Contains("LOTSERIE"))
                 {
                     DataGridViewTextBoxColumn colLot = new DataGridViewTextBoxColumn();
@@ -304,7 +285,6 @@ namespace TRANSIT
                     }
  
                 }
-
 
                 if (dt.Rows.Count == 0)
                 {
