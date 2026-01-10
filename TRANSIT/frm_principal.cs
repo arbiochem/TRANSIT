@@ -48,28 +48,28 @@ namespace TRANSIT
             drpsource.DataSource=null;
             drpdestinataire.DataSource = null;
 
-            List<Serveurs> vpnList = new List<Serveurs>()
+            List<Serveurs> serveur_source = new List<Serveurs>()
             {
                 //new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
-                //new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
+                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "SRV-ARB", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
             };
 
-            List<Serveurs> vpnLists = new List<Serveurs>()
+            List<Serveurs> serveur_dest = new List<Serveurs>()
             {
-                //new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
+                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
                 new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
                 new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
             };
 
-            drpsource.DataSource = vpnList;
+            drpsource.DataSource = serveur_source;
             drpsource.DisplayMember = "Name";   // affiché
             drpsource.ValueMember = "Ip";       // valeur
 
-            drpdestinataire.DataSource = vpnLists;
+            drpdestinataire.DataSource = serveur_dest;
             drpdestinataire.DisplayMember = "Name";   // affiché
             drpdestinataire.ValueMember = "Ip";       // valeur
 
@@ -125,8 +125,8 @@ namespace TRANSIT
             using ( con= new SqlConnection(conns))
             {
                 con.Open();
-                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
-                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
+                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
+                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
                 da.Fill(dt);
             }
 
@@ -201,7 +201,7 @@ namespace TRANSIT
                     SELECT 
                         doc.DO_Type,
                         doc.DO_Piece,
-                        FORMAT(doc.DO_Date, 'ddMMyy') AS DO_Date,
+                        FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
                         doc.AR_Ref,
                         doc.DL_Design,
                         CAST(doc.DL_Qte AS INT) AS DL_Qte,
@@ -383,7 +383,8 @@ namespace TRANSIT
                     {
                         frm_trait.txtligne.Text = recs;
                     }
-                        string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
+                        
+                    string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
                     string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
 
                     if (!cellValues.StartsWith("MAT")){
@@ -456,7 +457,7 @@ namespace TRANSIT
             textEdit.Width = 200;
 
             // Arguments de l'InputBox
-            XtraInputBoxArgs args = new XtraInputBoxArgs();
+            /*XtraInputBoxArgs args = new XtraInputBoxArgs();
             args.Caption = "Mot de passe";
             args.Prompt = "Entrez le mot de passe";
             args.DefaultButtonIndex = 0;
@@ -486,7 +487,7 @@ namespace TRANSIT
                     MessageBoxIcon.Error
                 );
                 mdp = XtraInputBox.Show(args) as string;
-            }
+            }*/
 
             try
             {
@@ -507,7 +508,7 @@ namespace TRANSIT
                                 List<string> cells = new List<string>();
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
-                                    if (cell.ColumnIndex != 6 && cell.ColumnIndex != 7 && cell.ColumnIndex != 9)
+                                    if (cell.ColumnIndex != 7)
                                     {
                                         if (cell.Value is DateTime dateValue)
                                         {
