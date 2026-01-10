@@ -45,6 +45,34 @@ namespace TRANSIT
                         {
                             cmd.Connection = con;
 
+                            /*cmd.CommandText = @"
+                                DISABLE TRIGGER TG_CBUPD_F_LOTSERIE ON F_LotSerie;
+                                DISABLE TRIGGER TG_UPD_F_LOTSERIE ON F_LotSerie;";
+
+                            cmd.ExecuteNonQuery();
+
+                            if (txtdateperemption.Text == "")
+                            {
+                                txtdateperemption.Text = "2000 -01-01";
+                            }
+
+                            cmd.CommandText = @"
+                            UPDATE F_LotSerie
+                            SET LotSerie = @LotSerie
+                            WHERE
+                            Ar_Ref=@AR_Ref AND DL_NoOut=@DL_No";
+
+                            cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
+                            cmd.Parameters.AddWithValue("@DL_No", lbldlnoout.Text);
+                            cmd.Parameters.AddWithValue("@LotSerie", lotserie);
+
+                            cmd.ExecuteNonQuery();
+
+                            cmd.CommandText = @"
+                                ENABLE TRIGGER TG_CBUPD_F_LOTSERIE ON F_LotSerie;
+                                ENABLE TRIGGER TG_UPD_F_LOTSERIE ON F_LotSerie;";*/
+
+
                             cmd.CommandText = @"
                                 DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
                                 ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
@@ -57,9 +85,9 @@ namespace TRANSIT
 
                             cmd.CommandText = @"
                             INSERT INTO F_LotSerie
-                            (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie)
+                            (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut)
                             VALUES
-                            (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie)";
+                            (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
 
                             cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                             cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
@@ -67,12 +95,14 @@ namespace TRANSIT
                             cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
                             cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
                             cmd.Parameters.AddWithValue("@LotSerie", lotserie);
+                            cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
 
                             cmd.ExecuteNonQuery();
 
                             cmd.CommandText = @"
                                 ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
                                 ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
+                            cmd.Parameters.Clear();
                             cmd.Parameters.Clear();
                         }
                     }

@@ -208,12 +208,13 @@ namespace TRANSIT
                         lot.LS_NoSerie,
                         f.DE_Intitule,
                         lot.LS_PEREMPTION,
-                        tete.DO_Tiers
+                        tete.DO_Tiers,
+                        doc.DL_No
                     FROM F_DOCLIGNE AS doc
                     INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
                     INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
-                    LEFT JOIN F_LOTSERIE AS lot 
-                        ON lot.DL_NoIn = doc.DL_No 
+                    INNER JOIN F_LOTSERIE AS lot 
+                        ON lot.DL_NoOut = doc.DL_No 
                        AND lot.AR_Ref = doc.AR_Ref
                     WHERE doc.DO_Piece = @DoPiece
                       AND doc.DL_Qte IS NOT NULL
@@ -236,6 +237,7 @@ namespace TRANSIT
 
                 dgSource.Columns["DO_Type"].HeaderText = "DO_Type";
                 dgSource.Columns["DO_Type"].Visible = false;
+                dgSource.Columns["DL_No"].Visible = false;
                 dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
                 dgSource.Columns["Do_Date"].HeaderText = "Date";
                 dgSource.Columns["AR_Ref"].HeaderText = "Référence";
@@ -374,6 +376,8 @@ namespace TRANSIT
                     frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
                     frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
                     frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
+                    frm_trait.txtdateperemption.Text = dgSource.Rows[i].Cells[9].Value.ToString();
+                    frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
                     if (i == 0)
                     {
                         frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
@@ -508,7 +512,7 @@ namespace TRANSIT
                                 List<string> cells = new List<string>();
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
-                                    if (cell.ColumnIndex != 7)
+                                    if (cell.ColumnIndex != 7 && cell.ColumnIndex != 9 && cell.ColumnIndex != 12)
                                     {
                                         if (cell.Value is DateTime dateValue)
                                         {
@@ -528,7 +532,7 @@ namespace TRANSIT
                                         }
                                     }
                                 }
-                                sw.WriteLine(string.Join(";", cells));
+                                sw.WriteLine(string.Join(";", cells) + ";");
                             }
                         }
                     }
