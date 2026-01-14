@@ -394,8 +394,8 @@ namespace TRANSIT
                     if (!cellValues.StartsWith("MAT")){
                         if (string.IsNullOrWhiteSpace(cellValue))
                         {
-                            frm_trait.txtLot.Text = "LOT" +
-                                new string(txtTDD.Text.Where(char.IsDigit).ToArray());
+                            /*frm_trait.txtLot.Text = "LOT" +
+                                new string(txtTDD.Text.Where(char.IsDigit).ToArray());*/
                         }
                         else
                         {
