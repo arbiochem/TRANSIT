@@ -50,19 +50,14 @@ namespace TRANSIT
 
             List<Serveurs> serveur_source = new List<Serveurs>()
             {
-                //new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "SRV-ARB", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
-                new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
+                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" }
             };
 
             List<Serveurs> serveur_dest = new List<Serveurs>()
             {
-                new Serveurs { Ip = "192.168.88.162", Name = "Localhost" },
                 new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" },
-                new Serveurs { Ip = "26.16.25.130", Name = "ANALAKELY" }
+                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" }
             };
 
             drpsource.DataSource = serveur_source;
@@ -112,41 +107,74 @@ namespace TRANSIT
                                                     $"Connection Timeout=240;";
 
             cmbBase.DataSource = null;
-            chargerBdd(connectionSource,cmbBase);
-            
-        }
 
-        private void chargerBdd(string conns,System.Windows.Forms.ComboBox cmb)
-        {
-            SqlConnection con = null;
-
-            DataTable dt = new DataTable();
-
-            using ( con= new SqlConnection(conns))
+            if (drpsource.Text == "ARBIOCHEM")
             {
-                con.Open();
-                //SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('BIJOU','C_Model') ORDER BY name", con);
-                SqlDataAdapter da = new SqlDataAdapter("SELECT name FROM sys.databases WHERE database_id > 4 and name NOT IN('C_Model') ORDER BY name", con);
-                da.Fill(dt);
-            }
+                List<string> bases = new List<string>
+                {
+                    "ACTIVO",
+                    "ACTIVOFEED_ANALAKELY",
+                    "ACTIVOFEED_ANTANIMORA",
+                    "ACTIVOFEED_DIEGO_AG",
+                    "ACTIVOFEED_IMERINTSIATOSIKA",
+                    "ACTIVOFEED_MAHINTSY",
+                    "ACTIVOFEED_MAJUNGA",
+                    "ARBIOCHEM",
+                    "TRANSIT",
+                    "TSARAKOHO"
 
+                };
 
-            cmb.DataSource = dt;
-            cmb.DisplayMember = "Name";   // affiché
-            cmb.ValueMember = "Name";       // valeur
-
-            cmb.Refresh();
-
-            if (dt.Rows.Count > 0)
-            {
-                cmb.Enabled = true;
+                chargerBdd(connectionSource, cmbBase, bases);
             }
             else
             {
-                cmb.Enabled = false;
+                List<string> bases = new List<string>
+                {
+                    "ACTIVOFEED_TMM"
+                };
+                chargerBdd(connectionSource, cmbBase, bases);
+            }
+        }
+
+        private void chargerBdd(string conns, System.Windows.Forms.ComboBox cmb, List<string> bases)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(conns))
+            {
+                con.Open();
+
+                var parameters = bases
+                    .Select((b, i) => $"@db{i}")
+                    .ToArray();
+
+                 string sql = $@"
+                SELECT name
+                FROM sys.databases
+                WHERE database_id > 4
+                  AND name NOT IN ('BIJOU','C_Model')
+                  AND name IN ({string.Join(",", parameters)})
+                ORDER BY name";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    for (int i = 0; i < bases.Count; i++)
+                    {
+                        cmd.Parameters.AddWithValue(parameters[i], bases[i]);
+                    }
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
             }
 
-            con.Close();
+            cmb.DataSource = dt;
+            cmb.DisplayMember = "name";
+            cmb.ValueMember = "name";
+            cmb.Enabled = dt.Rows.Count > 0;
         }
 
         private void drpdestinataire_DropDownClosed(object sender, EventArgs e)
@@ -165,7 +193,32 @@ namespace TRANSIT
                                                     $"Connection Timeout=240;";
 
             cmbBase1.DataSource = null;
-            chargerBdd(connectionDestinataire, cmbBase1);
+            if (drpdestinataire.Text == "ARBIOCHEM")
+            {
+                List<string> bases = new List<string>
+                {
+                    "ACTIVO",
+                    "ACTIVOFEED_ANALAKELY",
+                    "ACTIVOFEED_ANTANIMORA",
+                    "ACTIVOFEED_DIEGO_AG",
+                    "ACTIVOFEED_IMERINTSIATOSIKA",
+                    "ACTIVOFEED_MAHINTSY",
+                    "ACTIVOFEED_MAJUNGA",
+                    "ARBIOCHEM",
+                    "TRANSIT",
+                    "TSARAKOHO"
+                };
+
+                chargerBdd(connectionDestinataire, cmbBase1, bases);
+            }
+            else
+            {
+                List<string> bases = new List<string>
+                {
+                    "ACTIVOFEED_TMM"
+                };
+                chargerBdd(connectionDestinataire, cmbBase1, bases);
+            }
         }
 
         private void btn_lister_Click(object sender, EventArgs e)
