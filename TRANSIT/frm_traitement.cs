@@ -121,7 +121,7 @@ namespace TRANSIT
                 }
 
                 _frmParent.lblrecup.Text = "";
-                _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";"+txtLot.Text+";"+ lotserie;
+                _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";"+txtLot.Text+";"+ lotserie+";"+txtRefs.Text;
                 this.Close();
             }
         }

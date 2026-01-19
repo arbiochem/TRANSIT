@@ -1,12 +1,16 @@
-﻿using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+﻿using DevExpress.ClipboardSource.SpreadsheetML;
+using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+using DevExpress.Utils.Extensions;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
+using PdfSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -15,9 +19,6 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Forms;
 using static DevExpress.XtraEditors.RoundedSkinPanel;
-using PdfSharp.Drawing;
-using DevExpress.Utils.Extensions;
-using DevExpress.ClipboardSource.SpreadsheetML;
 
 namespace TRANSIT
 {
@@ -333,13 +334,19 @@ namespace TRANSIT
                     colLot.Visible = false;   // ou true selon ton besoin
 
                     // Vérifier que la colonne de référence existe
-                    if (dgSource.Columns.Contains("LS_PEREMPTION"))
+                    if (dgSource.Columns.Contains("Do_TIERS"))
                     {
-                        int index = dgSource.Columns["LS_PEREMPTION"].Index+2;
+                        int index = dgSource.Columns["Do_TIERS"].Index+1;
                         dgSource.Columns.Insert(index, colLot);
                     }
- 
                 }
+
+                DataGridViewTextBoxColumn colREFERENCES = new DataGridViewTextBoxColumn();
+                colREFERENCES.Name = "REFERENCES";
+                colREFERENCES.HeaderText = "REFERENCES";
+                colREFERENCES.Width = 100;
+                colREFERENCES.Visible = true;
+                dgSource.Columns.Insert(13, colREFERENCES);
 
                 if (dt.Rows.Count == 0)
                 {
@@ -385,30 +392,6 @@ namespace TRANSIT
             args.Editor = textEdit;
 
             // Affichage
-            string mdp = XtraInputBox.Show(args) as string;
-
-            // Vérification
-            while (string.IsNullOrEmpty(mdp))
-            {
-                XtraMessageBox.Show(
-                    "Mot de passe requis",
-                    "Attention",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                mdp = XtraInputBox.Show(args) as string;
-            }
-
-            while (mdp != "P@ssw0rd2026*")
-            {
-                XtraMessageBox.Show(
-                    "Mot de passe incorrect!!!",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-                mdp = XtraInputBox.Show(args) as string;
-            }
 
             if (dgSource.Rows.Count > 0)
             {
@@ -431,6 +414,7 @@ namespace TRANSIT
                     frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
                     frm_trait.txtdateperemption.Text = dgSource.Rows[i].Cells[9].Value.ToString();
                     frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
+                    frm_trait.txtRefs.Text = txtTDD.Text;
                     if (i == 0)
                     {
                         frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
@@ -464,6 +448,7 @@ namespace TRANSIT
                     dgSource.Rows[i].Cells[5].Value = recup[2];
                     dgSource.Rows[i].Cells[6].Value = recup[3];
                     dgSource.Rows[i].Cells[11].Value = recup[4];
+                    dgSource.Rows[i].Cells[13].Value = recup[5];
 
                     Application.DoEvents();
                 }
@@ -512,40 +497,6 @@ namespace TRANSIT
             textEdit.Properties.UseSystemPasswordChar = true; // 👈 mode password
             textEdit.Properties.PasswordChar = '●'; // optionnel
             textEdit.Width = 200;
-
-            // Arguments de l'InputBox
-            /*XtraInputBoxArgs args = new XtraInputBoxArgs();
-            args.Caption = "Mot de passe";
-            args.Prompt = "Entrez le mot de passe";
-            args.DefaultButtonIndex = 0;
-            args.Editor = textEdit;
-
-            // Affichage
-            string mdp = XtraInputBox.Show(args) as string;
-
-            // Vérification
-            while (string.IsNullOrEmpty(mdp))
-            {
-                XtraMessageBox.Show(
-                    "Mot de passe requis",
-                    "Attention",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                mdp = XtraInputBox.Show(args) as string;
-            }
-
-            while (mdp!="P@ssw0rd2026*")
-            {
-                XtraMessageBox.Show(
-                    "Mot de passe incorrect!!!",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-                mdp = XtraInputBox.Show(args) as string;
-            }*/
-
             try
             {
                 SaveFileDialog saveDialog = new SaveFileDialog();
@@ -562,6 +513,13 @@ namespace TRANSIT
                         {
                             if (!row.IsNewRow)
                             {
+                                /*foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    Debug.WriteLine(
+                                        $"Row {row.Index} | Col {dgSource.Columns[cell.ColumnIndex].Name} = {cell.Value}"
+                                    );
+                                }*/
+
                                 List<string> cells = new List<string>();
                                 foreach (DataGridViewCell cell in row.Cells)
                                 {
