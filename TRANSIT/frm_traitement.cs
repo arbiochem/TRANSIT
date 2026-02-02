@@ -24,100 +24,75 @@ namespace TRANSIT
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtqte1.Text) || string.IsNullOrWhiteSpace(txtLot.Text))
+            if (string.IsNullOrWhiteSpace(txtqte1.Text))
             {
-                MessageBox.Show("La quantité ou le nom du lot ne peut pas être vide !!!!","Message d'erreur",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("La quantité ne peut pas être vide !!!!","Message d'erreur",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
             else
             {
                 //Insertion dans F_LotSerie
 
-                lotserie = recuperer_lotserie();
-
-                try
+                if (txtLot.Text != "")
                 {
-                    using (SqlConnection con = new SqlConnection(_frmParent.connectionSource2))
+                    lotserie = recuperer_lotserie();
+
+                    try
                     {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand())
+                        using (SqlConnection con = new SqlConnection(_frmParent.connectionSource2))
                         {
-                            cmd.Connection = con;
+                            con.Open();
 
-                            /*cmd.CommandText = @"
-                                DISABLE TRIGGER TG_CBUPD_F_LOTSERIE ON F_LotSerie;
-                                DISABLE TRIGGER TG_UPD_F_LOTSERIE ON F_LotSerie;";
-
-                            cmd.ExecuteNonQuery();
-
-                            if (txtdateperemption.Text == "")
+                            using (SqlCommand cmd = new SqlCommand())
                             {
-                                txtdateperemption.Text = "2000 -01-01";
-                            }
-
-                            cmd.CommandText = @"
-                            UPDATE F_LotSerie
-                            SET LotSerie = @LotSerie
-                            WHERE
-                            Ar_Ref=@AR_Ref AND DL_NoOut=@DL_No";
-
-                            cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
-                            cmd.Parameters.AddWithValue("@DL_No", lbldlnoout.Text);
-                            cmd.Parameters.AddWithValue("@LotSerie", lotserie);
-
-                            cmd.ExecuteNonQuery();
-
-                            cmd.CommandText = @"
-                                ENABLE TRIGGER TG_CBUPD_F_LOTSERIE ON F_LotSerie;
-                                ENABLE TRIGGER TG_UPD_F_LOTSERIE ON F_LotSerie;";*/
-
-                            if (!string.IsNullOrWhiteSpace(txtLot.Text))
-                            {
-                                cmd.CommandText = @"
+                                cmd.Connection = con;
+                                if (!string.IsNullOrWhiteSpace(txtLot.Text))
+                                {
+                                    cmd.CommandText = @"
                                 DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
                                 ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                if (txtdateperemption.Text == "")
-                                {
-                                    txtdateperemption.Text = "2000-01-01";
-                                }
+                                    if (txtdateperemption.Text == "")
+                                    {
+                                        txtdateperemption.Text = "2000-01-01";
+                                    }
 
-                                cmd.CommandText = @"
+                                    cmd.CommandText = @"
                                 INSERT INTO F_LotSerie
                                 (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut)
                                 VALUES
                                 (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
 
-                                cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
-                                cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
-                                cmd.Parameters.AddWithValue("@Qte", Convert.ToDecimal(txtqte1.Text));
-                                cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
-                                cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
-                                cmd.Parameters.AddWithValue("@LotSerie", lotserie);
-                                cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
+                                    cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
+                                    cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
+                                    cmd.Parameters.AddWithValue("@Qte", Convert.ToDecimal(txtqte1.Text));
+                                    cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
+                                    cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
+                                    cmd.Parameters.AddWithValue("@LotSerie", lotserie);
+                                    cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                cmd.CommandText = @"
+                                    cmd.CommandText = @"
                                 ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
                                 ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
-                                cmd.Parameters.Clear();
-                                cmd.Parameters.Clear();
+                                    cmd.Parameters.Clear();
+                                    cmd.Parameters.Clear();
+                                }
                             }
                         }
                     }
-                }
-                catch (SqlException sqlEx)
-                {
-                    MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur SQL",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Erreur : {ex.Message}", "Erreur",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    catch (SqlException sqlEx)
+                    {
+                        MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur SQL",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur : {ex.Message}", "Erreur",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
                 _frmParent.lblrecup.Text = "";

@@ -373,7 +373,7 @@
             this.layoutControlItem11.Size = new System.Drawing.Size(395, 25);
             this.layoutControlItem11.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem11.TextVisible = false;
-            this.layoutControlItem11.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            this.layoutControlItem11.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;  
             // 
             // layoutControlItem12
             // 

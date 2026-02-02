@@ -43,6 +43,8 @@
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.cmbdepot = new System.Windows.Forms.ComboBox();
+            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
             this.cmbBase1 = new System.Windows.Forms.ComboBox();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
@@ -57,8 +59,6 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.cmbdepot = new System.Windows.Forms.ComboBox();
-            this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
@@ -103,6 +103,7 @@
             this.btnPrint.Size = new System.Drawing.Size(1460, 91);
             this.btnPrint.StyleController = this.layoutControl1;
             this.btnPrint.TabIndex = 7;
+            this.btnPrint.Visible = false;
             this.btnPrint.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // dataLayoutControl1
@@ -138,7 +139,7 @@
             this.btn_save.Size = new System.Drawing.Size(246, 27);
             this.btn_save.StyleController = this.dataLayoutControl1;
             this.btn_save.TabIndex = 10;
-            this.btn_save.Text = "Exporter en TXT";
+            this.btn_save.Text = "Envoyer";
             this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
             // btn_lancer
@@ -254,6 +255,26 @@
             this.groupControl1.Size = new System.Drawing.Size(1460, 121);
             this.groupControl1.TabIndex = 4;
             this.groupControl1.Text = "Options";
+            // 
+            // cmbdepot
+            // 
+            this.cmbdepot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbdepot.Enabled = false;
+            this.cmbdepot.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbdepot.FormattingEnabled = true;
+            this.cmbdepot.Location = new System.Drawing.Point(909, 85);
+            this.cmbdepot.Name = "cmbdepot";
+            this.cmbdepot.Size = new System.Drawing.Size(378, 24);
+            this.cmbdepot.TabIndex = 20;
+            this.cmbdepot.DropDownClosed += new System.EventHandler(this.cmbdepot_DropDownClosed);
+            // 
+            // labelControl5
+            // 
+            this.labelControl5.Location = new System.Drawing.Point(858, 93);
+            this.labelControl5.Name = "labelControl5";
+            this.labelControl5.Size = new System.Drawing.Size(33, 16);
+            this.labelControl5.TabIndex = 19;
+            this.labelControl5.Text = "Dépôt";
             // 
             // lblrecup
             // 
@@ -392,26 +413,7 @@
             this.layoutControlItem3.Size = new System.Drawing.Size(1464, 95);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
-            // 
-            // cmbdepot
-            // 
-            this.cmbdepot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbdepot.Enabled = false;
-            this.cmbdepot.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbdepot.FormattingEnabled = true;
-            this.cmbdepot.Location = new System.Drawing.Point(909, 85);
-            this.cmbdepot.Name = "cmbdepot";
-            this.cmbdepot.Size = new System.Drawing.Size(378, 24);
-            this.cmbdepot.TabIndex = 20;
-            this.cmbdepot.DropDownClosed += new System.EventHandler(this.cmbdepot_DropDownClosed);
-            // 
-            // labelControl5
-            // 
-            this.labelControl5.Location = new System.Drawing.Point(858, 93);
-            this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(33, 16);
-            this.labelControl5.TabIndex = 19;
-            this.labelControl5.Text = "Dépôt";
+            this.layoutControlItem3.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             // 
             // frm_principal
             // 
