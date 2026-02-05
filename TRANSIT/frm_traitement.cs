@@ -50,7 +50,8 @@ namespace TRANSIT
                                 {
                                     cmd.CommandText = @"
                                 DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                                ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
+                                ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
+                                ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
                                     cmd.ExecuteNonQuery();
 
                                     if (txtdateperemption.Text == "")
@@ -76,7 +77,8 @@ namespace TRANSIT
 
                                     cmd.CommandText = @"
                                 ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                                ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;";
+                                ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
+                                ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
                                     cmd.Parameters.Clear();
                                     cmd.Parameters.Clear();
                                 }

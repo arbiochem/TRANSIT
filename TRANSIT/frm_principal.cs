@@ -336,7 +336,7 @@ namespace TRANSIT
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
-            if (!txtTDD.Text.StartsWith("MS") && !txtTDD.Text.StartsWith("MES"))
+            if (!txtTDD.Text.StartsWith("MS") && !txtTDD.Text.StartsWith("METS"))
             {
                 MessageBox.Show("Ce n'est pas un mouvement de sortie!!!!","Message d'erreur",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -864,7 +864,7 @@ namespace TRANSIT
             EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
-            EnvoyerMailAvecMailKit(fichier, "arbiochem.magasinier@arbiochem.mg");
+            //EnvoyerMailAvecMailKit(fichier, "arbiochem.magasinier@arbiochem.mg");
 
             MessageBox.Show("Email envoyé avec succès !", "Succès",
                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
