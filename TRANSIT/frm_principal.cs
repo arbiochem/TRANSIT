@@ -336,7 +336,7 @@ namespace TRANSIT
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
-            if (!txtTDD.Text.StartsWith("MS"))
+            if (!txtTDD.Text.StartsWith("MS") && !txtTDD.Text.StartsWith("MT"))
             {
                 MessageBox.Show("Ce n'est pas un mouvement de sortie!!!!","Message d'erreur",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
