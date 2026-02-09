@@ -43,22 +43,20 @@
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.cmbdepot = new System.Windows.Forms.ComboBox();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
             this.cmbBase1 = new System.Windows.Forms.ComboBox();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.cmbBase = new System.Windows.Forms.ComboBox();
-            this.drpdestinataire = new System.Windows.Forms.ComboBox();
-            this.drpsource = new System.Windows.Forms.ComboBox();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
@@ -97,13 +95,12 @@
             // 
             this.btnPrint.Enabled = false;
             this.btnPrint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.ImageOptions.Image")));
-            this.btnPrint.Location = new System.Drawing.Point(12, 230);
+            this.btnPrint.Location = new System.Drawing.Point(12, 231);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
             this.btnPrint.Size = new System.Drawing.Size(1460, 91);
             this.btnPrint.StyleController = this.layoutControl1;
             this.btnPrint.TabIndex = 7;
-            this.btnPrint.Visible = false;
             this.btnPrint.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // dataLayoutControl1
@@ -112,10 +109,10 @@
             this.dataLayoutControl1.Controls.Add(this.btn_save);
             this.dataLayoutControl1.Controls.Add(this.btn_lancer);
             this.dataLayoutControl1.Controls.Add(this.btn_lister);
-            this.dataLayoutControl1.Location = new System.Drawing.Point(12, 137);
+            this.dataLayoutControl1.Location = new System.Drawing.Point(12, 140);
             this.dataLayoutControl1.Name = "dataLayoutControl1";
             this.dataLayoutControl1.Root = this.layoutControlGroup1;
-            this.dataLayoutControl1.Size = new System.Drawing.Size(1460, 89);
+            this.dataLayoutControl1.Size = new System.Drawing.Size(1460, 87);
             this.dataLayoutControl1.TabIndex = 6;
             this.dataLayoutControl1.Text = "dataLayoutControl1";
             // 
@@ -134,9 +131,9 @@
             this.btn_save.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_save.Appearance.Options.UseFont = true;
             this.btn_save.Enabled = false;
-            this.btn_save.Location = new System.Drawing.Point(1202, 46);
+            this.btn_save.Location = new System.Drawing.Point(1120, 45);
             this.btn_save.Name = "btn_save";
-            this.btn_save.Size = new System.Drawing.Size(246, 27);
+            this.btn_save.Size = new System.Drawing.Size(328, 27);
             this.btn_save.StyleController = this.dataLayoutControl1;
             this.btn_save.TabIndex = 10;
             this.btn_save.Text = "Envoyer";
@@ -147,9 +144,9 @@
             this.btn_lancer.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_lancer.Appearance.Options.UseFont = true;
             this.btn_lancer.Enabled = false;
-            this.btn_lancer.Location = new System.Drawing.Point(12, 46);
+            this.btn_lancer.Location = new System.Drawing.Point(12, 45);
             this.btn_lancer.Name = "btn_lancer";
-            this.btn_lancer.Size = new System.Drawing.Size(1186, 27);
+            this.btn_lancer.Size = new System.Drawing.Size(1104, 27);
             this.btn_lancer.StyleController = this.dataLayoutControl1;
             this.btn_lancer.TabIndex = 9;
             this.btn_lancer.Text = "Lancer le traitement ...";
@@ -178,7 +175,7 @@
             this.layoutControlItem7,
             this.layoutControlItem8});
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(1460, 89);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(1460, 87);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItem5
@@ -188,7 +185,7 @@
             this.layoutControlItem5.Control = this.btn_lancer;
             this.layoutControlItem5.Location = new System.Drawing.Point(0, 31);
             this.layoutControlItem5.Name = "layoutControlItem5";
-            this.layoutControlItem5.Size = new System.Drawing.Size(1190, 38);
+            this.layoutControlItem5.Size = new System.Drawing.Size(1108, 36);
             this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem5.TextVisible = false;
             // 
@@ -197,9 +194,9 @@
             this.layoutControlItem6.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem6.Control = this.btn_save;
-            this.layoutControlItem6.Location = new System.Drawing.Point(1190, 31);
+            this.layoutControlItem6.Location = new System.Drawing.Point(1108, 31);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(250, 38);
+            this.layoutControlItem6.Size = new System.Drawing.Size(332, 36);
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
             // 
@@ -228,33 +225,40 @@
             this.dgSource.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgSource.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSource.Location = new System.Drawing.Point(28, 325);
+            this.dgSource.Location = new System.Drawing.Point(28, 326);
             this.dgSource.Name = "dgSource";
             this.dgSource.ReadOnly = true;
             this.dgSource.RowHeadersWidth = 51;
             this.dgSource.RowTemplate.Height = 24;
             this.dgSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgSource.Size = new System.Drawing.Size(1444, 410);
+            this.dgSource.Size = new System.Drawing.Size(1444, 409);
             this.dgSource.TabIndex = 0;
             // 
             // groupControl1
             // 
+            this.groupControl1.Controls.Add(this.labelControl2);
+            this.groupControl1.Controls.Add(this.labelControl1);
             this.groupControl1.Controls.Add(this.cmbdepot);
             this.groupControl1.Controls.Add(this.labelControl5);
             this.groupControl1.Controls.Add(this.lblrecup);
             this.groupControl1.Controls.Add(this.cmbBase1);
             this.groupControl1.Controls.Add(this.labelControl4);
             this.groupControl1.Controls.Add(this.cmbBase);
-            this.groupControl1.Controls.Add(this.drpdestinataire);
-            this.groupControl1.Controls.Add(this.drpsource);
             this.groupControl1.Controls.Add(this.labelControl3);
-            this.groupControl1.Controls.Add(this.labelControl2);
-            this.groupControl1.Controls.Add(this.labelControl1);
             this.groupControl1.Location = new System.Drawing.Point(12, 12);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(1460, 121);
+            this.groupControl1.Size = new System.Drawing.Size(1460, 124);
             this.groupControl1.TabIndex = 4;
             this.groupControl1.Text = "Options";
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Appearance.ForeColor = System.Drawing.Color.White;
+            this.labelControl1.Appearance.Options.UseForeColor = true;
+            this.labelControl1.Location = new System.Drawing.Point(642, 48);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(0, 16);
+            this.labelControl1.TabIndex = 21;
             // 
             // cmbdepot
             // 
@@ -262,15 +266,15 @@
             this.cmbdepot.Enabled = false;
             this.cmbdepot.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbdepot.FormattingEnabled = true;
-            this.cmbdepot.Location = new System.Drawing.Point(909, 85);
+            this.cmbdepot.Location = new System.Drawing.Point(592, 79);
             this.cmbdepot.Name = "cmbdepot";
-            this.cmbdepot.Size = new System.Drawing.Size(378, 24);
+            this.cmbdepot.Size = new System.Drawing.Size(695, 24);
             this.cmbdepot.TabIndex = 20;
             this.cmbdepot.DropDownClosed += new System.EventHandler(this.cmbdepot_DropDownClosed);
             // 
             // labelControl5
             // 
-            this.labelControl5.Location = new System.Drawing.Point(858, 93);
+            this.labelControl5.Location = new System.Drawing.Point(553, 85);
             this.labelControl5.Name = "labelControl5";
             this.labelControl5.Size = new System.Drawing.Size(33, 16);
             this.labelControl5.TabIndex = 19;
@@ -287,10 +291,9 @@
             // cmbBase1
             // 
             this.cmbBase1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBase1.Enabled = false;
             this.cmbBase1.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbBase1.FormattingEnabled = true;
-            this.cmbBase1.Location = new System.Drawing.Point(472, 85);
+            this.cmbBase1.Location = new System.Drawing.Point(156, 79);
             this.cmbBase1.Name = "cmbBase1";
             this.cmbBase1.Size = new System.Drawing.Size(378, 24);
             this.cmbBase1.TabIndex = 13;
@@ -298,7 +301,7 @@
             // 
             // labelControl4
             // 
-            this.labelControl4.Location = new System.Drawing.Point(337, 93);
+            this.labelControl4.Location = new System.Drawing.Point(21, 87);
             this.labelControl4.Name = "labelControl4";
             this.labelControl4.Size = new System.Drawing.Size(117, 16);
             this.labelControl4.TabIndex = 12;
@@ -307,60 +310,21 @@
             // cmbBase
             // 
             this.cmbBase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBase.Enabled = false;
             this.cmbBase.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbBase.FormattingEnabled = true;
-            this.cmbBase.Location = new System.Drawing.Point(472, 54);
+            this.cmbBase.Location = new System.Drawing.Point(156, 48);
             this.cmbBase.Name = "cmbBase";
             this.cmbBase.Size = new System.Drawing.Size(378, 24);
             this.cmbBase.TabIndex = 9;
             this.cmbBase.DropDownClosed += new System.EventHandler(this.cmbBase_DropDownClosed);
             // 
-            // drpdestinataire
-            // 
-            this.drpdestinataire.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drpdestinataire.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drpdestinataire.FormattingEnabled = true;
-            this.drpdestinataire.Location = new System.Drawing.Point(153, 88);
-            this.drpdestinataire.Name = "drpdestinataire";
-            this.drpdestinataire.Size = new System.Drawing.Size(176, 24);
-            this.drpdestinataire.TabIndex = 8;
-            this.drpdestinataire.DropDownClosed += new System.EventHandler(this.drpdestinataire_DropDownClosed);
-            // 
-            // drpsource
-            // 
-            this.drpsource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drpsource.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drpsource.FormattingEnabled = true;
-            this.drpsource.Location = new System.Drawing.Point(153, 53);
-            this.drpsource.Name = "drpsource";
-            this.drpsource.Size = new System.Drawing.Size(176, 24);
-            this.drpsource.TabIndex = 7;
-            this.drpsource.DropDownClosed += new System.EventHandler(this.drpsource_DropDownClosed);
-            // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(335, 61);
+            this.labelControl3.Location = new System.Drawing.Point(19, 55);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(131, 16);
             this.labelControl3.TabIndex = 6;
             this.labelControl3.Text = "Nom de la base source";
-            // 
-            // labelControl2
-            // 
-            this.labelControl2.Location = new System.Drawing.Point(16, 96);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(117, 16);
-            this.labelControl2.TabIndex = 3;
-            this.labelControl2.Text = "Serveur Destinataire";
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Location = new System.Drawing.Point(16, 57);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(89, 16);
-            this.labelControl1.TabIndex = 1;
-            this.labelControl1.Text = "Serveur Source";
             // 
             // Root
             // 
@@ -380,25 +344,25 @@
             this.layoutControlItem1.Control = this.groupControl1;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(1464, 125);
+            this.layoutControlItem1.Size = new System.Drawing.Size(1464, 128);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
             // layoutControlItem2
             // 
             this.layoutControlItem2.Control = this.dgSource;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 313);
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 314);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 414);
+            this.layoutControlItem2.Size = new System.Drawing.Size(1464, 413);
             this.layoutControlItem2.Text = " ";
             this.layoutControlItem2.TextSize = new System.Drawing.Size(4, 16);
             // 
             // layoutControlItem4
             // 
             this.layoutControlItem4.Control = this.dataLayoutControl1;
-            this.layoutControlItem4.Location = new System.Drawing.Point(0, 125);
+            this.layoutControlItem4.Location = new System.Drawing.Point(0, 128);
             this.layoutControlItem4.Name = "layoutControlItem4";
-            this.layoutControlItem4.Size = new System.Drawing.Size(1464, 93);
+            this.layoutControlItem4.Size = new System.Drawing.Size(1464, 91);
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
             // 
@@ -408,12 +372,21 @@
             this.layoutControlItem3.ImageOptions.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.layoutControlItem3.ImageOptions.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.True;
             this.layoutControlItem3.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("layoutControlItem3.ImageOptions.Image")));
-            this.layoutControlItem3.Location = new System.Drawing.Point(0, 218);
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 219);
             this.layoutControlItem3.Name = "layoutControlItem3";
             this.layoutControlItem3.Size = new System.Drawing.Size(1464, 95);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             this.layoutControlItem3.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Appearance.ForeColor = System.Drawing.Color.White;
+            this.labelControl2.Appearance.Options.UseForeColor = true;
+            this.labelControl2.Location = new System.Drawing.Point(829, 46);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(0, 16);
+            this.labelControl2.TabIndex = 22;
             // 
             // frm_principal
             // 
@@ -460,8 +433,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
         public System.Windows.Forms.DataGridView dgSource;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
-        private DevExpress.XtraEditors.LabelControl labelControl2;
-        private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraDataLayout.DataLayoutControl dataLayoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
@@ -470,8 +441,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem5;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem6;
         private DevExpress.XtraEditors.LabelControl labelControl3;
-        private System.Windows.Forms.ComboBox drpsource;
-        private System.Windows.Forms.ComboBox drpdestinataire;
         private System.Windows.Forms.ComboBox cmbBase;
         private DevExpress.XtraEditors.SimpleButton btn_lister;
         private System.Windows.Forms.ComboBox cmbBase1;
@@ -484,6 +453,8 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private System.Windows.Forms.ComboBox cmbdepot;
         private DevExpress.XtraEditors.LabelControl labelControl5;
+        public DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
     }
 }
 

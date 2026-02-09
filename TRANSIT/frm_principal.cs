@@ -19,6 +19,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -150,37 +151,30 @@ namespace TRANSIT
             public string Name { get; set; }
         }
 
+        string prot_guid;
         private void frm_principal_Load(object sender, EventArgs e)
         {
+            this.Enabled = false;
+
+            frm_login f = new frm_login(labelControl1, labelControl2);
+
+            f.Owner = this;
+
+            // 👉 Toujours au-dessus de son Owner
+            f.TopMost = true;
+            // Positionner le login à côté
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
+            // 👉 S'abonner à l'évènement de succès
+            //f.LoginSuccess += Login_Reussi;
+
+            // Afficher les DEUX fenêtres
+            f.Show();
+
+            this.Enabled = true;
+            load_source();
+            load_destinataire();
             btnPrint.AutoSize = true;
-            drpsource.DataSource=null;
-            drpdestinataire.DataSource = null;
-
-            List<Serveurs> serveur_source = new List<Serveurs>()
-            {
-                new Serveurs { Ip = "SRV-ARB", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" }
-            };
-
-            List<Serveurs> serveur_dest = new List<Serveurs>()
-            {
-                new Serveurs { Ip = "26.53.123.231", Name = "ARBIOCHEM" },
-                new Serveurs { Ip = "26.71.34.164", Name = "TAMATAVE" }
-            };
-
-            drpsource.DataSource = serveur_source;
-            drpsource.DisplayMember = "Name";   // affiché
-            drpsource.ValueMember = "Ip";       // valeur
-
-            drpdestinataire.DataSource = serveur_dest;
-            drpdestinataire.DisplayMember = "Name";   // affiché
-            drpdestinataire.ValueMember = "Ip";       // valeur
-
-            drpdestinataire.Refresh();
-            drpsource.Refresh();
-
-            drpsource_DropDownClosed(sender, e);
-            drpdestinataire_DropDownClosed(sender, e);
 
             txtTDD.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
         }
@@ -199,50 +193,32 @@ namespace TRANSIT
            
         }
 
-        private void drpsource_DropDownClosed(object sender, EventArgs e)
+        private void load_source()
         {
-            string selectedIp = drpsource.SelectedValue?.ToString();
+            string ip = labelControl1.Text;
 
-            // Ou si vous voulez l'objet complet
-            var selectedVpn = drpsource.SelectedItem as Serveurs; // Remplacez VpnObject par votre type
-            if (selectedVpn != null)
-            {
-                string ip = selectedVpn.Ip;
-                source = ip;
-            }
             connectionSource = $"Server={source};Database=master;" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
             cmbBase.DataSource = null;
 
-            if (drpsource.Text == "ARBIOCHEM")
+            List<string> bases = new List<string>
             {
-                List<string> bases = new List<string>
-                {
-                    "ACTIVO",
-                    "ACTIVOFEED_ANALAKELY",
-                    "ACTIVOFEED_ANTANIMORA",
-                    "ACTIVOFEED_DIEGO_AG",
-                    "ACTIVOFEED_IMERINTSIATOSIKA",
-                    "ACTIVOFEED_MAHINTSY",
-                    "ACTIVOFEED_MAJUNGA",
-                    "ARBIOCHEM",
-                    "TRANSIT",
-                    "TSARAKOHO"
+                "ACTIVO",
+                "ACTIVOFEED_ANALAKELY",
+                "ACTIVOFEED_ANTANIMORA",
+                "ACTIVOFEED_DIEGO_AG",
+                "ACTIVOFEED_IMERINTSIATOSIKA",
+                "ACTIVOFEED_MAHINTSY",
+                "ACTIVOFEED_MAJUNGA",
+                "ARBIOCHEM",
+                "TRANSIT",
+                "TSARAKOHO"
 
-                };
+            };
 
-                chargerBdd(connectionSource, cmbBase, bases);
-            }
-            else
-            {
-                List<string> bases = new List<string>
-                {
-                    "ACTIVOFEED_TMM"
-                };
-                chargerBdd(connectionSource, cmbBase, bases);
-            }
+            chargerBdd(connectionSource, cmbBase, bases);
         }
 
         private void chargerBdd(string conns, System.Windows.Forms.ComboBox cmb, List<string> bases)
@@ -285,48 +261,33 @@ namespace TRANSIT
             cmb.Enabled = dt.Rows.Count > 0;
         }
 
-        private void drpdestinataire_DropDownClosed(object sender, EventArgs e)
+        private void load_destinataire()
         {
-            string selectedIp = drpdestinataire.SelectedValue?.ToString();
+            string ip = labelControl1.Text;
 
             // Ou si vous voulez l'objet complet
-            var selectedVpn = drpdestinataire.SelectedItem as Serveurs; // Remplacez VpnObject par votre type
-            if (selectedVpn != null)
-            {
-                string ip = selectedVpn.Ip;
-                destinataire = ip;
-            }
+            
             connectionDestinataire = $"Server={destinataire};Database=master;" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
             cmbBase1.DataSource = null;
-            if (drpdestinataire.Text == "ARBIOCHEM")
-            {
-                List<string> bases = new List<string>
-                {
-                    "ACTIVO",
-                    "ACTIVOFEED_ANALAKELY",
-                    "ACTIVOFEED_ANTANIMORA",
-                    "ACTIVOFEED_DIEGO_AG",
-                    "ACTIVOFEED_IMERINTSIATOSIKA",
-                    "ACTIVOFEED_MAHINTSY",
-                    "ACTIVOFEED_MAJUNGA",
-                    "ARBIOCHEM",
-                    "TRANSIT",
-                    "TSARAKOHO"
-                };
 
-                chargerBdd(connectionDestinataire, cmbBase1, bases);
-            }
-            else
+            List<string> bases = new List<string>
             {
-                List<string> bases = new List<string>
-                {
-                    "ACTIVOFEED_TMM"
-                };
-                chargerBdd(connectionDestinataire, cmbBase1, bases);
-            }
+                "ACTIVO",
+                "ACTIVOFEED_ANALAKELY",
+                "ACTIVOFEED_ANTANIMORA",
+                "ACTIVOFEED_DIEGO_AG",
+                "ACTIVOFEED_IMERINTSIATOSIKA",
+                "ACTIVOFEED_MAHINTSY",
+                "ACTIVOFEED_MAJUNGA",
+                "ARBIOCHEM",
+                "TRANSIT",
+                "TSARAKOHO"
+            };
+
+            chargerBdd(connectionDestinataire, cmbBase1, bases);
         }
 
         private void btn_lister_Click(object sender, EventArgs e)
@@ -999,15 +960,42 @@ namespace TRANSIT
             cmbdepot.DataSource = null;
             DataTable dt = new DataTable();
 
+
+            string connectionString = $"Server={labelControl1.Text};Database=ARBIOCHEM;" +
+                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
+                                                     $"Connection Timeout=240;";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(@"SELECT REPLACE(PROT_Guid,'{','')  
+                                                                FROM 
+                                                                F_PROTECTIONCIAL 
+                                                                WHERE PROT_EMail = @usermail", conn))
+                {
+                    cmd.Parameters.Add("@usermail", SqlDbType.NVarChar, 256).Value = labelControl2.Text;
+
+                    conn.Open();
+
+                    //object result = cmd.ExecuteScalar();
+                    string result = cmd.ExecuteScalar() as string;
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        prot_guid = result.ToString();
+                    }
+                }
+            }
+
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionSource2))
                 {
                     con.Open();
-                    string query = "SELECT DISTINCT DE_Intitule FROM F_DEPOT ORDER BY DE_Intitule ASC";
+                    string query = "select DISTINCT d.DE_Intitule from F_DEPOT as d INNER JOIN F_DEPOT_DEDIE as fd on d.DE_NO=fd.DE_No WHERE PROT_Guid=@prodguid  AND fd.AUTHORIZED=1 ORDER BY d.DE_Intitule ASC";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
+                        cmd.Parameters.Add("@prodguid", SqlDbType.NVarChar, 256).Value = prot_guid;
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
                             da.Fill(dt);

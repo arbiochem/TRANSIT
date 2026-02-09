@@ -191,3 +191,5 @@ D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\bin\Debug\MailKit.dll.config
 D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\bin\Debug\MimeKit.pdb
 D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\bin\Debug\MimeKit.xml
 D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\bin\Debug\System.Formats.Asn1.xml
+D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\obj\Debug\TRANSIT.frm_login.resources
+D:\Arbiochem\Travail\Projets\TRANSIT\TRANSIT\obj\Debug\TRANSIT.FrmChangePassword.resources

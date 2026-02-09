@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,17 @@ namespace TRANSIT
                             using (SqlCommand cmd = new SqlCommand())
                             {
                                 cmd.Connection = con;
+
+                                if (!decimal.TryParse(
+                                    txtqte1.Text.Trim(),
+                                    NumberStyles.Any,
+                                    CultureInfo.InvariantCulture,
+                                    out decimal qte))
+                                    {
+                                        MessageBox.Show("Quantité invalide");
+                                        return;
+                                    }
+
                                 if (!string.IsNullOrWhiteSpace(txtLot.Text))
                                 {
                                     cmd.CommandText = @"
@@ -67,7 +79,7 @@ namespace TRANSIT
 
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                                     cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
-                                    cmd.Parameters.AddWithValue("@Qte", Convert.ToDecimal(txtqte1.Text));
+                                    cmd.Parameters.Add("@Qte",qte);
                                     cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
                                     cmd.Parameters.AddWithValue("@LotSerie", lotserie);
