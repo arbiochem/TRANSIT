@@ -21,7 +21,7 @@ namespace TRANSIT
 {
     public partial class frm_login : Form
     {
-        public string Username { get; private set; }
+        public static string Username { get; private set; }
         public string IDName { get; private set; }
         public string UserRole { get; private set; }
 
@@ -58,12 +58,9 @@ namespace TRANSIT
             }
         }
 
-        private DevExpress.XtraEditors.LabelControl _labelControl1;
-        private DevExpress.XtraEditors.LabelControl _labelControl2;
-        public frm_login(DevExpress.XtraEditors.LabelControl labelControl1, DevExpress.XtraEditors.LabelControl labelControl2)
+        public string Server { get; set; }
+        public frm_login()
         {
-            this._labelControl1 = labelControl1;
-            this._labelControl2 = labelControl2;
             InitializeComponent();
 
             string filePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "serveurs_connex.txt");
@@ -76,6 +73,8 @@ namespace TRANSIT
             }
             //cboServers.SelectedIndex = 0;
             cboServers.EditValueChanged += cboServers_EditValueChanged;
+
+            this.ControlBox = false;
         }
 
         public string serverName;
@@ -83,9 +82,6 @@ namespace TRANSIT
         private void cboServers_EditValueChanged_1(object sender, EventArgs e)
         {
             serverName = cboServers.EditValue?.ToString();
-
-            _labelControl1.Text = serverName;
-
             cboServers.SelectedIndexChanged += comboBox_SelectedIndexChanged;
         }
 
@@ -255,6 +251,7 @@ namespace TRANSIT
         private void BtnOK_Click(object sender, EventArgs e)
         {
             leserveur = cboServers.EditValue?.ToString();
+            Username = tokenEmail.Text;
             pwd = textPwd.Text;
             testerAutorisation();
             this.DialogResult = DialogResult.OK;
@@ -339,16 +336,13 @@ namespace TRANSIT
         {
             leserveur = cboServers.EditValue?.ToString();
             pwd = textPwd.Text;
-
-            frm_principal frmp = new frm_principal();
-            frmp.labelControl1.Text = leserveur;
             testerAutorisation();
             this.DialogResult = DialogResult.OK;
         }
 
         private void tokenEmail_EditValueChanged(object sender, EventArgs e)
         {
-            _labelControl2.Text = tokenEmail.EditValue?.ToString();
+            //_labelControl2.Text = tokenEmail.EditValue?.ToString();
         }
     }
 }

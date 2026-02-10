@@ -43,7 +43,6 @@
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.cmbdepot = new System.Windows.Forms.ComboBox();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
@@ -237,7 +236,6 @@
             // groupControl1
             // 
             this.groupControl1.Controls.Add(this.labelControl2);
-            this.groupControl1.Controls.Add(this.labelControl1);
             this.groupControl1.Controls.Add(this.cmbdepot);
             this.groupControl1.Controls.Add(this.labelControl5);
             this.groupControl1.Controls.Add(this.lblrecup);
@@ -250,15 +248,6 @@
             this.groupControl1.Size = new System.Drawing.Size(1460, 124);
             this.groupControl1.TabIndex = 4;
             this.groupControl1.Text = "Options";
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Appearance.ForeColor = System.Drawing.Color.White;
-            this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Location = new System.Drawing.Point(642, 48);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(0, 16);
-            this.labelControl1.TabIndex = 21;
             // 
             // cmbdepot
             // 
@@ -453,7 +442,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private System.Windows.Forms.ComboBox cmbdepot;
         private DevExpress.XtraEditors.LabelControl labelControl5;
-        public DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
     }
 }

@@ -123,7 +123,7 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    string query = @"SELECT TOP 1 LotSerie FROM [dbo].[F_LotSerie] ORDER BY LotSerie DESC";
+                    string query = @"SELECT MAX(CAST(LotSerie AS INT)) +1 FROM [dbo].[F_LotSerie]";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {

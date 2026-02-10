@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -154,22 +155,11 @@ namespace TRANSIT
         string prot_guid;
         private void frm_principal_Load(object sender, EventArgs e)
         {
-            this.Enabled = false;
-
-            frm_login f = new frm_login(labelControl1, labelControl2);
-
-            f.Owner = this;
-
-            // 👉 Toujours au-dessus de son Owner
-            f.TopMost = true;
-            // Positionner le login à côté
-            f.StartPosition = FormStartPosition.CenterScreen;
-            f.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
-            // 👉 S'abonner à l'évènement de succès
-            //f.LoginSuccess += Login_Reussi;
-
-            // Afficher les DEUX fenêtres
-            f.Show();
+            using (frm_login f = new frm_login())
+            {
+                f.StartPosition = FormStartPosition.CenterParent;
+                f.ShowDialog(this);
+            }
 
             this.Enabled = true;
             load_source();
@@ -195,9 +185,7 @@ namespace TRANSIT
 
         private void load_source()
         {
-            string ip = labelControl1.Text;
-
-            connectionSource = $"Server={source};Database=master;" +
+            connectionSource = $"Server={frm_login.leserveur};Database=master;" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
@@ -263,11 +251,7 @@ namespace TRANSIT
 
         private void load_destinataire()
         {
-            string ip = labelControl1.Text;
-
-            // Ou si vous voulez l'objet complet
-            
-            connectionDestinataire = $"Server={destinataire};Database=master;" +
+            connectionDestinataire = $"Server={frm_login.leserveur};Database=master;" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
@@ -293,7 +277,7 @@ namespace TRANSIT
         private void btn_lister_Click(object sender, EventArgs e)
         {
             string baseName = cmbBase.SelectedValue?.ToString();
-            connectionSource1 = $"Server={source};Database={baseName};" +
+            connectionSource1 = $"Server={frm_login.leserveur};Database={baseName};" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
@@ -448,7 +432,7 @@ namespace TRANSIT
                         {
                             btn_lancer.Enabled = false;
 
-                            MessageBox.Show("Aucune donnée trouvée pour la période sélectionnée.");
+                            MessageBox.Show("Aucune donnée trouvée");
                         }
                         else
                         {
@@ -596,6 +580,11 @@ namespace TRANSIT
 
         bool tester_lancement(string cond)
         {
+            string baseName = cmbBase.SelectedValue?.ToString();
+            connectionSource1 = $"Server={frm_login.leserveur};Database={cmbBase1.Text};" +
+                                                    $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
+                                                    $"Connection Timeout=240;";
+
             Boolean b_test = false;
             using (SqlConnection con = new SqlConnection(connectionSource1))
             {
@@ -829,6 +818,90 @@ namespace TRANSIT
 
             MessageBox.Show("Email envoyé avec succès !", "Succès",
                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            maj_numero();
+        }
+
+        private void maj_numero()
+        {
+            string baseName = cmbBase.SelectedValue?.ToString();
+            connectionSource1 = $"Server={frm_login.leserveur};Database={cmbBase1.Text};" +
+                                                    $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
+                                                    $"Connection Timeout=240;";
+
+            string rect = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionSource1))
+                {
+                    con.Open();
+
+                    string queryUpdate = @"UPDATE [dbo].[F_DOCCURRENTPIECE]
+                          SET DC_PIECE = 'ME' + CAST(CAST(SUBSTRING(DC_PIECE, 3, LEN(DC_PIECE) - 2) AS INT) + 1 AS VARCHAR)
+                          WHERE DC_PIECE LIKE 'ME%'";
+
+                    using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, con))
+                    {
+                        int rowsAffected = cmdUpdate.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionSource1))
+                {
+                    con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = con;
+
+                        cmd.CommandText = @"
+                            DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
+                            ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
+                            ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
+                        cmd.ExecuteNonQuery();
+
+                        /*if (txtdateperemption.Text == "")
+                        {
+                            txtdateperemption.Text = "2000-01-01";
+                        }*/
+
+                        /*cmd.CommandText = @"
+                            INSERT INTO F_LotSerie
+                            (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut)
+                            VALUES
+                            (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
+
+                        cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
+                        cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
+                        cmd.Parameters.Add("@Qte", qte);
+                        cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
+                        cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
+                        cmd.Parameters.AddWithValue("@LotSerie", lotserie);
+                        cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
+
+                        cmd.ExecuteNonQuery();*/
+
+                        cmd.CommandText = @"
+                            ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
+                            ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
+                            ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.Clear();
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur SQL",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void txtTDD_EditValueChanged(object sender, EventArgs e)
@@ -948,7 +1021,7 @@ namespace TRANSIT
             cmbdepot.Enabled = true;
 
             string baseName1 = cmbBase1.SelectedValue?.ToString();
-            connectionSource2 = $"Server={destinataire};Database={baseName1};" +
+            connectionSource2 = $"Server={frm_login.leserveur};Database={baseName1};" +
                                                     $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                     $"Connection Timeout=240;";
 
@@ -961,7 +1034,7 @@ namespace TRANSIT
             DataTable dt = new DataTable();
 
 
-            string connectionString = $"Server={labelControl1.Text};Database=ARBIOCHEM;" +
+            string connectionString = $"Server={frm_login.leserveur};Database=ARBIOCHEM;" +
                                                      $"User ID=Dev;Password=1234;TrustServerCertificate=True;" +
                                                      $"Connection Timeout=240;";
 
@@ -972,7 +1045,7 @@ namespace TRANSIT
                                                                 F_PROTECTIONCIAL 
                                                                 WHERE PROT_EMail = @usermail", conn))
                 {
-                    cmd.Parameters.Add("@usermail", SqlDbType.NVarChar, 256).Value = labelControl2.Text;
+                    cmd.Parameters.Add("@usermail", SqlDbType.NVarChar, 256).Value = frm_login.Username;
 
                     conn.Open();
 
@@ -986,36 +1059,34 @@ namespace TRANSIT
                 }
             }
 
+            cmbdepot.Items.Clear();
+            cmbdepot.Items.Add("");
+
             try
             {
-                using (SqlConnection con = new SqlConnection(connectionSource2))
+                using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
-                    string query = "select DISTINCT d.DE_Intitule from F_DEPOT as d INNER JOIN F_DEPOT_DEDIE as fd on d.DE_NO=fd.DE_No WHERE PROT_Guid=@prodguid  AND fd.AUTHORIZED=1 ORDER BY d.DE_Intitule ASC";
-
+                    string query = "select DISTINCT d.DE_Intitule from F_DEPOT as d INNER JOIN F_DEPOT_DEDIE as fd on d.DE_NO=fd.DE_No WHERE PROT_Guid=@prodguid AND fd.AUTHORIZED=1 ORDER BY d.DE_Intitule ASC";
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@prodguid", SqlDbType.NVarChar, 256).Value = prot_guid;
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+
+                        // Exécuter la requête et lire les résultats
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            da.Fill(dt);
+                            cmbdepot.Items.Clear(); // Vider d'abord
+                            cmbdepot.Items.Add(""); // Ajouter une ligne vide
+
+                            while (reader.Read())
+                            {
+                                cmbdepot.Items.Add(reader["DE_Intitule"].ToString());
+                            }
                         }
                     }
                 }
 
-                // Ajouter une ligne vide au début (optionnel)
-                DataRow emptyRow = dt.NewRow();
-                emptyRow["DE_Intitule"] = "";
-                dt.Rows.InsertAt(emptyRow, 0);
-
-                // Lier au ComboBox
-                cmbdepot.DataSource = dt;
-                cmbdepot.DisplayMember = "DE_Intitule";  // Ce qui s'affiche
-                cmbdepot.ValueMember = "DE_Intitule";    // La valeur récupérée
-
-                // Optionnel : Sélectionner le premier élément
-                if (cmbdepot.Items.Count > 0)
-                    cmbdepot.SelectedIndex = 0;
+                cmbdepot.SelectedIndex = 0;
             }
             catch (SqlException sqlEx)
             {
