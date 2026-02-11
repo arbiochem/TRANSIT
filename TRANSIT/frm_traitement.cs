@@ -33,6 +33,11 @@ namespace TRANSIT
             else
             {
                 //Insertion dans F_LotSerie
+                if (txtLot.Text == "")
+                {
+                    txtLot.Text = "LOT";
+                }
+
 
                 if (txtLot.Text != "")
                 {
@@ -78,7 +83,8 @@ namespace TRANSIT
                                 (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
 
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
-                                    cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
+                                    
+                                    cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text.ToString());
                                     cmd.Parameters.Add("@Qte",qte);
                                     cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
@@ -123,7 +129,7 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    string query = @"SELECT MAX(CAST(LotSerie AS INT)) +1 FROM [dbo].[F_LotSerie]";
+                    string query = @"SELECT MAX(CAST(LotSerie AS INT)) FROM [dbo].[F_LotSerie]";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {

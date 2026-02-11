@@ -401,7 +401,7 @@ namespace TRANSIT
                         {
                             if (!row.IsNewRow)
                             {
-                                row.Cells["DEPOT_DEST"].Value = cmbdepot.SelectedValue;
+                                row.Cells["DEPOT_DEST"].Value = cmbdepot.Text;
                             }
                         }
 
@@ -810,11 +810,13 @@ namespace TRANSIT
                 }
             }
 
+
             // 🔹 Envoi du mail avec la pièce jointe
             EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
-            //EnvoyerMailAvecMailKit(fichier, "arbiochem.magasinier@arbiochem.mg");
+            EnvoyerMailAvecMailKit(fichier, "arbiochem.magasinier@arbiochem.mg");
+
 
             MessageBox.Show("Email envoyé avec succès !", "Succès",
                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
