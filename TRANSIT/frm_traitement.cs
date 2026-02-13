@@ -78,9 +78,9 @@ namespace TRANSIT
 
                                     cmd.CommandText = @"
                                 INSERT INTO F_LotSerie
-                                (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut)
+                                (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut,cbCreationUser)
                                 VALUES
-                                (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
+                                (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut,@cbCreationUser)";
 
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                                     
@@ -90,6 +90,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
                                     cmd.Parameters.AddWithValue("@LotSerie", lotserie);
                                     cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
+                                    cmd.Parameters.AddWithValue("@cbCreationUser", cbUserCreation.Text);
 
                                     cmd.ExecuteNonQuery();
 

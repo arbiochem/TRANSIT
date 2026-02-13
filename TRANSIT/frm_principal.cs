@@ -153,6 +153,7 @@ namespace TRANSIT
         }
 
         string prot_guid;
+        string cbCreation;
         private void frm_principal_Load(object sender, EventArgs e)
         {
             using (frm_login f = new frm_login())
@@ -334,6 +335,7 @@ namespace TRANSIT
 
                         string query = @"
                     SELECT 
+                        DISTINCT
                         doc.DO_Type,
                         doc.DO_Piece,
                         FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
@@ -648,6 +650,7 @@ namespace TRANSIT
                             frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
                             frm_trait.txtdateperemption.Text = dgSource.Rows[i].Cells[9].Value.ToString();
                             frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
+                            frm_trait.cbUserCreation.Text = cbCreation;
                             frm_trait.txtRefs.Text = txtTDD.Text;
                             if (i == 0)
                             {
@@ -686,7 +689,8 @@ namespace TRANSIT
                             frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
                             frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
                             frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
-                            frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[10].Value.ToString();
+                            frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
+                            frm_trait.cbUserCreation.Text = cbCreation;
                             frm_trait.txtRefs.Text = txtTDD.Text;
                             if (i == 0)
                             {
@@ -703,7 +707,6 @@ namespace TRANSIT
 
                         string[] recup = lblrecup.Text.ToString().Split(';');
 
-
                         dgSource.Rows[i].Cells[0].Value = recup[0];
                         dgSource.Rows[i].Cells[1].Value = recup[1];
                         dgSource.Rows[i].Cells[5].Value = recup[2];
@@ -716,8 +719,8 @@ namespace TRANSIT
                         }
                         else
                         {
-                            dgSource.Rows[i].Cells[9].Value = recup[4];
-                            dgSource.Rows[i].Cells[11].Value = recup[5];
+                            dgSource.Rows[i].Cells[11].Value = recup[4];
+                            dgSource.Rows[i].Cells[13].Value = recup[5];
                         }
 
                         Application.DoEvents();
@@ -728,7 +731,7 @@ namespace TRANSIT
             }
             else
             {
-                MessageBox.Show("Ce TDD est déjà traité!!!!","Message d'erreur",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Ce TDD est déjà traité!!!!", "Message d'erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -815,7 +818,6 @@ namespace TRANSIT
             EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
             EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
-            EnvoyerMailAvecMailKit(fichier, "arbiochem.magasinier@arbiochem.mg");
 
 
             MessageBox.Show("Email envoyé avec succès !", "Succès",
@@ -1042,21 +1044,24 @@ namespace TRANSIT
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(@"SELECT REPLACE(PROT_Guid,'{','')  
-                                                                FROM 
-                                                                F_PROTECTIONCIAL 
-                                                                WHERE PROT_EMail = @usermail", conn))
+                using (SqlCommand cmd = new SqlCommand(@"
+                SELECT 
+                    REPLACE(PROT_Guid, '{', '') as PROT_Guid,
+                    cbCreationUser 
+                FROM F_PROTECTIONCIAL 
+                WHERE PROT_EMail = @usermail", conn))
                 {
                     cmd.Parameters.Add("@usermail", SqlDbType.NVarChar, 256).Value = frm_login.Username;
 
-                    conn.Open();
+                    conn.Open(); // ✅ OBLIGATOIRE - Décommentez cette ligne !
 
-                    //object result = cmd.ExecuteScalar();
-                    string result = cmd.ExecuteScalar() as string;
-
-                    if (!string.IsNullOrEmpty(result))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        prot_guid = result.ToString();
+                        if (reader.Read())
+                        {
+                            prot_guid = reader["PROT_Guid"]?.ToString() ?? string.Empty;
+                            cbCreation = reader["cbCreationUser"]?.ToString() ?? string.Empty;
+                        }
                     }
                 }
             }
