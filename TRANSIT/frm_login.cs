@@ -98,89 +98,89 @@ namespace TRANSIT
         }
 
         public static string mailuser = "";
-        private void testerAutorisation()
+        private bool testerAutorisation()
         {
             try
             {
-                if (tokenEmail.EditValue.ToString() == "" || tokenEmail.EditValue == null)
-                {
-                    return;
-                }
+                if (tokenEmail.EditValue == null || tokenEmail.EditValue.ToString() == "")
+                    return false;
+
                 string userName = tokenEmail.EditValue.ToString();
                 string password = textPwd.Text;
-                mailuser = tokenEmail.EditValue.ToString();
+
                 if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
                 {
-                    MessageBox.Show("Veuillez entrer un nom d'utilisateur et un mot de passe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    MessageBox.Show("Veuillez entrer un nom d'utilisateur et un mot de passe.",
+                                    "Erreur",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return false;
                 }
 
-                if (VerifyLogin(userName, password))
+                if (!VerifyLogin(userName, password))
                 {
-                    using (SqlConnection connection = new SqlConnection(
-                               $"Data Source={serverName};Initial Catalog=arbapp;User ID=Dev;Password=1234;TrustServerCertificate=True"))
+                    MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect, ou vérifiez le service réseau.",
+                                    "Erreur",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                    return false; // 🔴 BLOQUE ICI
+                }
+
+                using (SqlConnection connection = new SqlConnection(
+                       $"Data Source={serverName};Initial Catalog=arbapp;User ID=Dev;Password=1234;TrustServerCertificate=True"))
+                {
+                    connection.Open();
+
+                    string query = "SELECT id_user, UserGroup, IDName, IsPasswordChanged FROM T_UserRole WHERE UserName = @UserName";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        try
-                        {
-                            connection.Open();
+                        command.Parameters.AddWithValue("@UserName", userName);
 
-                            // Vérifier si l'utilisateur a changé son mot de passe
-                            string query = "SELECT id_user, UserGroup, IDName, IsPasswordChanged FROM T_UserRole WHERE UserName = @UserName";
-                            using (SqlCommand command = new SqlCommand(query, connection))
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (!reader.Read())
                             {
-                                command.Parameters.AddWithValue("@UserName", userName);
-
-                                using (SqlDataReader reader = command.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        Guid id_user = Guid.Parse(reader["id_user"].ToString());
-                                        string userRole = reader["UserGroup"].ToString();
-                                        string idname = reader["IDName"].ToString();
-                                        bool isPasswordChanged = (bool)reader["IsPasswordChanged"];
-
-                                        Username = userName;
-                                        UserRole = userRole;
-                                        IDName = idname;
-
-                                        // Si le mot de passe n'a pas été changé, demander un changement de mot de passe
-                                        if (!isPasswordChanged)
-                                        {
-                                            MessageBox.Show("Vous devez changer votre mot de passe pour la première connexion.");
-                                            ShowChangePasswordForm(userName);
-                                            return; // Empêche l'accès à l'application si le mot de passe n'est pas changé
-                                        }
-
-                                        ApposerLastDate(serverName, userName);
-
-                                        this.Hide();
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Utilisateur introuvable.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    }
-                                }
+                                MessageBox.Show("Utilisateur introuvable.",
+                                                "Erreur",
+                                                MessageBoxButtons.OK,
+                                                MessageBoxIcon.Warning);
+                                return false;
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MethodBase m = MethodBase.GetCurrentMethod();
-                            MessageBox.Show($"Une erreur est survenue :{m}  : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            Guid id_user = Guid.Parse(reader["id_user"].ToString());
+                            string userRole = reader["UserGroup"].ToString();
+                            string idname = reader["IDName"].ToString();
+                            bool isPasswordChanged = (bool)reader["IsPasswordChanged"];
+
+                            Username = userName;
+                            UserRole = userRole;
+                            IDName = idname;
+
+                            if (!isPasswordChanged)
+                            {
+                                MessageBox.Show("Vous devez changer votre mot de passe pour la première connexion.");
+                                ShowChangePasswordForm(userName);
+                                return false; // 🔴 BLOQUE TANT QUE PAS CHANGÉ
+                            }
+
+                            ApposerLastDate(serverName, userName);
+
+                            return true; // ✅ LOGIN OK
                         }
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect, ou vérifiez le service réseau.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                MethodBase m = MethodBase.GetCurrentMethod();
-                MessageBox.Show($"Une erreur est survenue : {ex.Message}, {m}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erreur : {ex.Message}",
+                                "Erreur",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return false;
             }
-
         }
+
 
         private void ShowChangePasswordForm(string userName)
         {
@@ -253,8 +253,12 @@ namespace TRANSIT
             leserveur = cboServers.EditValue?.ToString();
             Username = tokenEmail.Text;
             pwd = textPwd.Text;
-            testerAutorisation();
-            this.DialogResult = DialogResult.OK;
+
+            if (testerAutorisation()) // ✅ seulement si TRUE
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         public static void TokenEdit_ValidateToken(object sender, TokenEditValidateTokenEventArgs e)
@@ -336,8 +340,11 @@ namespace TRANSIT
         {
             leserveur = cboServers.EditValue?.ToString();
             pwd = textPwd.Text;
-            testerAutorisation();
-            this.DialogResult = DialogResult.OK;
+            if (testerAutorisation()) // ✅ seulement si TRUE
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void tokenEmail_EditValueChanged(object sender, EventArgs e)

@@ -335,7 +335,6 @@ namespace TRANSIT
 
                         string query = @"
                     SELECT 
-                        DISTINCT
                         doc.DO_Type,
                         doc.DO_Piece,
                         FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
