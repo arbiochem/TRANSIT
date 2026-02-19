@@ -1073,7 +1073,7 @@ namespace TRANSIT
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
-                    string query = "select DISTINCT d.DE_Intitule from F_DEPOT as d INNER JOIN F_DEPOT_DEDIE as fd on d.DE_NO=fd.DE_No WHERE PROT_Guid=@prodguid AND fd.AUTHORIZED=1 ORDER BY d.DE_Intitule ASC";
+                    string query = "select DISTINCT d.DE_Intitule from F_DEPOT as d INNER JOIN F_DEPOT_DEDIE as fd on d.DE_NO=fd.DE_No WHERE fd.PROT_Guid=@prodguid AND fd.AUTHORIZED=1 ORDER BY d.DE_Intitule ASC";
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@prodguid", SqlDbType.NVarChar, 256).Value = prot_guid;

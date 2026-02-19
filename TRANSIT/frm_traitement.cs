@@ -92,7 +92,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
                                     cmd.Parameters.AddWithValue("@cbCreationUser", cbUserCreation.Text);
 
-                                    cmd.ExecuteNonQuery();
+                                    //cmd.ExecuteNonQuery();
 
                                     cmd.CommandText = @"
                                 ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
