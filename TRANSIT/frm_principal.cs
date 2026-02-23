@@ -653,8 +653,8 @@ namespace TRANSIT
                             frm_trait.txtRefs.Text = txtTDD.Text;
                             if (i == 0)
                             {
-                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
-                                recs = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
+                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
+                                recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
                             }
                             else
                             {
@@ -693,8 +693,8 @@ namespace TRANSIT
                             frm_trait.txtRefs.Text = txtTDD.Text;
                             if (i == 0)
                             {
-                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
-                                recs = "ME" + recuperer_last_numero(i + 1).ToString().PadLeft(5, '0');
+                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
+                                recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
                             }
                             else
                             {
@@ -734,7 +734,7 @@ namespace TRANSIT
             }
         }
 
-        private string recuperer_last_numero(int cond)
+        private string recuperer_last_numero()
         {
             string rec = "";
             try
@@ -743,7 +743,7 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    string query = @"SELECT TOP 1 DO_PIECE FROM [dbo].[F_DOCENTETE] WHERE DO_PIECE LIKE 'ME%' ORDER BY DO_Piece DESC";
+                    string query = @"SELECT TOP 1 DC_PIECE FROM [dbo].[F_DOCCURRENTPIECE] WHERE DC_PIECE LIKE 'ME%' ORDER BY DO_Piece DESC";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
@@ -751,7 +751,7 @@ namespace TRANSIT
                         if (result != null)
                         {
                             string results = new string(result.ToString().Where(char.IsDigit).ToArray());
-                            int k = int.Parse(results)+cond;
+                            int k = int.Parse(results);
                             rec = k.ToString();
                         }
                     }
