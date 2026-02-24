@@ -743,7 +743,7 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    string query = @"SELECT TOP 1 DC_PIECE FROM [dbo].[F_DOCCURRENTPIECE] WHERE DC_PIECE LIKE 'ME%' ORDER BY DO_Piece DESC";
+                    string query = @"SELECT TOP 1 DC_PIECE FROM [dbo].[F_DOCCURRENTPIECE] WHERE DC_PIECE LIKE 'ME%' ORDER BY DC_PIECE DESC";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
