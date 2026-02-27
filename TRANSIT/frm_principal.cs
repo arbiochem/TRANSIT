@@ -37,6 +37,7 @@ namespace TRANSIT
         string connectionDestinataire = "";
         public string connectionSource1 = "";
         public string connectionSource2 = "";
+        public string val = "";
 
         private async Task EnvoyerMailAvecMailKit(string filePath, string destinataire)
         {
@@ -327,14 +328,12 @@ namespace TRANSIT
 
             try
             {
-                if (tester_tdd_flotserie(txtTDD.Text))
+                using (SqlConnection con = new SqlConnection(connectionSource1))
                 {
-                    using (SqlConnection con = new SqlConnection(connectionSource1))
-                    {
-                        con.Open();
+                    con.Open();
 
-                        string query = @"
-                    SELECT 
+                    string query = @"
+                    SELECT DISTINCT
                         doc.DO_Type,
                         doc.DO_Piece,
                         FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
@@ -349,225 +348,89 @@ namespace TRANSIT
                     FROM F_DOCLIGNE AS doc
                     INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
                     INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
-                    INNER JOIN F_LOTSERIE AS lot 
-                        ON lot.DL_NoOut = doc.DL_No 
+                    LEFT JOIN F_LOTSERIE AS lot 
+                       ON lot.DL_NoOut = doc.DL_No 
                        AND lot.AR_Ref = doc.AR_Ref
                     WHERE doc.DO_Piece = @DoPiece
                       AND doc.DL_Qte IS NOT NULL
                       AND doc.DL_Qte <> 0";
 
-                        using (SqlCommand cmd = new SqlCommand(query, con))
-                        {
-                            // 🔐 PARAMÈTRE SÉCURISÉ
-                            cmd.Parameters.Add("@DoPiece", SqlDbType.VarChar).Value = txtTDD.Text.Trim();
-
-                            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                            {
-                                dt.Clear();
-                                da.Fill(dt);
-                            }
-                        }
-
-                        dgSource.DataSource = dt;
-
-                        dgSource.Columns["DO_Type"].HeaderText = "DO_Type";
-                        dgSource.Columns["DO_Type"].Visible = false;
-                        dgSource.Columns["DL_No"].Visible = false;
-                        dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
-                        dgSource.Columns["Do_Date"].HeaderText = "Date";
-                        dgSource.Columns["AR_Ref"].HeaderText = "Référence";
-                        dgSource.Columns["DL_Design"].HeaderText = "Désignation";
-                        dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
-                        dgSource.Columns["LS_NoSerie"].HeaderText = "Lot";
-                        dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt source";
-                        dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
-                        dgSource.Columns["Do_TIERS"].HeaderText = "TIERS";
-                        dgSource.Columns["Do_TIERS"].Visible = false;
-
-                        DataGridViewTextBoxColumn coldest = new DataGridViewTextBoxColumn();
-                        coldest.Name = "DEPOT_DEST";
-                        coldest.HeaderText = "Dépôt Dest";
-                        coldest.Width = 100;
-                        coldest.ReadOnly = false;
-
-                        // Vérifier que la colonne de référence existe
-                        if (dgSource.Columns.Contains("DE_Intitule"))
-                        {
-                            int index = dgSource.Columns["DE_Intitule"].Index + 1;
-                            dgSource.Columns.Insert(index, coldest);
-                        }
-
-                        // Remplir toutes les lignes existantes
-                        foreach (DataGridViewRow row in dgSource.Rows)
-                        {
-                            if (!row.IsNewRow)
-                            {
-                                row.Cells["DEPOT_DEST"].Value = cmbdepot.Text;
-                            }
-                        }
-
-                        if (!dgSource.Columns.Contains("LOTSERIE"))
-                        {
-                            DataGridViewTextBoxColumn colLot = new DataGridViewTextBoxColumn();
-                            colLot.Name = "LOTSERIE";
-                            colLot.HeaderText = "LOTSERIE";
-                            colLot.Width = 100;
-                            colLot.Visible = false;   // ou true selon ton besoin
-
-                            // Vérifier que la colonne de référence existe
-                            if (dgSource.Columns.Contains("Do_TIERS"))
-                            {
-                                int index = dgSource.Columns["Do_TIERS"].Index + 1;
-                                dgSource.Columns.Insert(index, colLot);
-                            }
-                        }
-
-                        DataGridViewTextBoxColumn colREFERENCES = new DataGridViewTextBoxColumn();
-                        colREFERENCES.Name = "REFERENCES";
-                        colREFERENCES.HeaderText = "REFERENCES";
-                        colREFERENCES.Width = 100;
-                        colREFERENCES.Visible = true;
-                        dgSource.Columns.Insert(13, colREFERENCES);
-
-                        if (dt.Rows.Count == 0)
-                        {
-                            btn_lancer.Enabled = false;
-
-                            MessageBox.Show("Aucune donnée trouvée");
-                        }
-                        else
-                        {
-                            btn_lancer.Enabled = true;
-                            btnPrint.Enabled = true;
-
-                            if (dgSource.Columns.Contains("DL_Qte"))
-                            {
-                                dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
-                                dgSource.Columns["DL_Qte"].DefaultCellStyle.Format = "N0"; // N0 = nombre avec 0 décimale et séparateur de milliers
-                                dgSource.Columns["DL_Qte"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    using (SqlConnection con = new SqlConnection(connectionSource1))
+                    using (SqlCommand cmd = new SqlCommand(query, con))
                     {
-                        con.Open();
+                        // 🔐 PARAMÈTRE SÉCURISÉ
+                        cmd.Parameters.Add("@DoPiece", SqlDbType.VarChar).Value = txtTDD.Text.Trim();
 
-                        string query = @"
-                    SELECT 
-                        doc.DO_Type,
-                        doc.DO_Piece,
-                        FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
-                        doc.AR_Ref,
-                        doc.DL_Design,
-                        CAST(doc.DL_Qte AS INT) AS DL_Qte,
-                        f.DE_Intitule,
-                        tete.DO_Tiers,
-                        doc.DL_No
-                    FROM F_DOCLIGNE AS doc
-                    INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
-                    INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
-                    WHERE doc.DO_Piece = @DoPiece
-                      AND doc.DL_Qte IS NOT NULL
-                      AND doc.DL_Qte <> 0";
-
-                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
-                            // 🔐 PARAMÈTRE SÉCURISÉ
-                            cmd.Parameters.Add("@DoPiece", SqlDbType.VarChar).Value = txtTDD.Text.Trim();
-
-                            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                            {
-                                dt.Clear();
-                                da.Fill(dt);
-                            }
+                            dt.Clear();
+                            da.Fill(dt);
                         }
+                    }
 
-                        dgSource.DataSource = dt;
+                    dgSource.DataSource = dt;
 
-                        dgSource.Columns["DO_Type"].HeaderText = "DO_Type";
-                        dgSource.Columns["DO_Type"].Visible = false;
-                        dgSource.Columns["DL_No"].Visible = false;
-                        dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
-                        dgSource.Columns["Do_Date"].HeaderText = "Date";
-                        dgSource.Columns["AR_Ref"].HeaderText = "Référence";
-                        dgSource.Columns["DL_Design"].HeaderText = "Désignation";
-                        dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
-                        dgSource.Columns["DL_Qte"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt source";
-                        dgSource.Columns["Do_TIERS"].HeaderText = "TIERS";
-                        dgSource.Columns["Do_TIERS"].Visible = false;
+                    dgSource.Columns["DO_Type"].HeaderText = "DO_Type";
+                    dgSource.Columns["DO_Type"].Visible = false;
+                    dgSource.Columns["DL_No"].Visible = false;
+                    dgSource.Columns["DO_Piece"].HeaderText = "N° Pièce";
+                    dgSource.Columns["Do_Date"].HeaderText = "Date";
+                    dgSource.Columns["AR_Ref"].HeaderText = "Référence";
+                    dgSource.Columns["DL_Design"].HeaderText = "Désignation";
+                    dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
+                    dgSource.Columns["LS_NoSerie"].HeaderText = "Lot";
+                    dgSource.Columns["DE_Intitule"].HeaderText = "Dépôt source";
+                    dgSource.Columns["LS_PEREMPTION"].HeaderText = "Date de péremption";
+                    dgSource.Columns["Do_TIERS"].HeaderText = "TIERS";
+                    dgSource.Columns["Do_TIERS"].Visible = false;
 
-                        DataGridViewTextBoxColumn coldest = new DataGridViewTextBoxColumn();
-                        coldest.Name = "DEPOT_DEST";
-                        coldest.HeaderText = "Dépôt Dest";
-                        coldest.Width = 100;
-                        coldest.ReadOnly = false;
+                    DataGridViewTextBoxColumn coldest = new DataGridViewTextBoxColumn();
+                    coldest.Name = "DEPOT_DEST";
+                    coldest.HeaderText = "Dépôt Dest";
+                    coldest.Width = 100;
+                    coldest.ReadOnly = false;
 
-                        // Vérifier que la colonne de référence existe
-                        if (dgSource.Columns.Contains("DE_Intitule"))
+                    // Vérifier que la colonne de référence existe
+                    if (dgSource.Columns.Contains("DE_Intitule"))
+                    {
+                        int index = dgSource.Columns["DE_Intitule"].Index + 1;
+                        dgSource.Columns.Insert(index, coldest);
+                    }
+
+                    // Remplir toutes les lignes existantes
+                    foreach (DataGridViewRow row in dgSource.Rows)
+                    {
+                        if (!row.IsNewRow)
                         {
-                            int index = dgSource.Columns["DE_Intitule"].Index + 1;
-                            dgSource.Columns.Insert(index, coldest);
+                            row.Cells["DEPOT_DEST"].Value = cmbdepot.Text;
                         }
+                    }
 
-                        // Remplir toutes les lignes existantes
-                        foreach (DataGridViewRow row in dgSource.Rows)
+                    DataGridViewTextBoxColumn colREFERENCES = new DataGridViewTextBoxColumn();
+                    colREFERENCES.Name = "REFERENCES";
+                    colREFERENCES.HeaderText = "REFERENCES";
+                    colREFERENCES.Width = 100;
+                    colREFERENCES.Visible = true;
+                    dgSource.Columns.Insert(12, colREFERENCES);
+
+                    if (dt.Rows.Count == 0)
+                    {
+                        btn_lancer.Enabled = false;
+
+                        MessageBox.Show("Aucune donnée trouvée");
+                    }
+                    else
+                    {
+                        btn_lancer.Enabled = true;
+                        btnPrint.Enabled = true;
+
+                        if (dgSource.Columns.Contains("DL_Qte"))
                         {
-                            if (!row.IsNewRow)
-                            {
-                                row.Cells["DEPOT_DEST"].Value = cmbdepot.SelectedValue;
-                            }
-                        }
-
-                        if (!dgSource.Columns.Contains("LOTSERIE"))
-                        {
-                            DataGridViewTextBoxColumn colLot = new DataGridViewTextBoxColumn();
-                            colLot.Name = "LOTSERIE";
-                            colLot.HeaderText = "LOTSERIE";
-                            colLot.Width = 100;
-                            colLot.Visible = false;   // ou true selon ton besoin
-
-                            // Vérifier que la colonne de référence existe
-                            if (dgSource.Columns.Contains("Do_TIERS"))
-                            {
-                                int index = dgSource.Columns["Do_TIERS"].Index + 1;
-                                dgSource.Columns.Insert(index, colLot);
-                            }
-                        }
-
-                        DataGridViewTextBoxColumn colREFERENCES = new DataGridViewTextBoxColumn();
-                        colREFERENCES.Name = "REFERENCES";
-                        colREFERENCES.HeaderText = "REFERENCES";
-                        colREFERENCES.Width = 100;
-                        colREFERENCES.Visible = true;
-                        dgSource.Columns.Insert(11, colREFERENCES);
-
-                        if (dt.Rows.Count == 0)
-                        {
-                            btn_lancer.Enabled = false;
-
-                            MessageBox.Show("Aucune donnée trouvée pour la période sélectionnée.");
-                        }
-                        else
-                        {
-                            btn_lancer.Enabled = true;
-                            btnPrint.Enabled = true;
-
-                            if (dgSource.Columns.Contains("DL_Qte"))
-                            {
-                                dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
-                                dgSource.Columns["DL_Qte"].DefaultCellStyle.Format = "N0"; // N0 = nombre avec 0 décimale et séparateur de milliers
-                                dgSource.Columns["DL_Qte"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                            }
+                            dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
+                            dgSource.Columns["DL_Qte"].DefaultCellStyle.Format = "N0"; // N0 = nombre avec 0 décimale et séparateur de milliers
+                            dgSource.Columns["DL_Qte"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                         }
                     }
                 }
-
-
-                
             }
             catch (SqlException sqlEx)
             {
@@ -624,7 +487,7 @@ namespace TRANSIT
                 args.DefaultButtonIndex = 0;
                 args.Editor = textEdit;
 
-                // Affichage
+                // Affichage"Lot
 
                 if (dgSource.Rows.Count > 0)
                 {
@@ -637,90 +500,48 @@ namespace TRANSIT
                             dgSource.Rows[i].Selected = true;
                         }
 
-                        if (tester_tdd_flotserie(txtTDD.Text))
+                        frm_traitement frm_trait = new frm_traitement(this);
+                        frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
+                        frm_trait.txttype.Text = "20";
+                        frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
+                        frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
+                        frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
+                        frm_trait.txtRefs.Text = txtTDD.Text;
+                        frm_trait.txtdepot.Text = cmbBase.Text.ToString();
+                        frm_trait.txtdepot1.Text = cmbdepot.Text.ToString();
+
+                        string cellValuelot = dgSource.Rows[i].Cells[6].Value?.ToString();
+
+                        frm_trait.txtLot.Text = !string.IsNullOrWhiteSpace(cellValuelot) ? cellValuelot : "LOT";
+
+                        string cellValueperemption = dgSource.Rows[i].Cells[9].Value?.ToString();
+
+                        frm_trait.txtdateperemption.Text = !string.IsNullOrWhiteSpace(cellValueperemption)
+                        ? cellValueperemption
+                        : $"{DateTime.Now.Year}-12-31";
+
+                        frm_trait.cbUserCreation.Text = cbCreation;
+                        if (i == 0)
                         {
-                            frm_traitement frm_trait = new frm_traitement(this);
-                            frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
-                            frm_trait.txttype.Text = "20";
-                            frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
-                            frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
-                            frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
-                            frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
-                            frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
-                            frm_trait.txtdateperemption.Text = dgSource.Rows[i].Cells[9].Value.ToString();
-                            frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
-                            frm_trait.cbUserCreation.Text = cbCreation;
-                            frm_trait.txtRefs.Text = txtTDD.Text;
-                            if (i == 0)
-                            {
-                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                                recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                            }
-                            else
-                            {
-                                frm_trait.txtligne.Text = recs;
-                            }
-
-                            string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
-                            string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
-
-                            if (!cellValues.StartsWith("MAT"))
-                            {
-                                if (string.IsNullOrWhiteSpace(cellValue))
-                                {
-                                    /*frm_trait.txtLot.Text = "LOT" +
-                                        new string(txtTDD.Text.Where(char.IsDigit).ToArray());*/
-                                }
-                                else
-                                {
-                                    frm_trait.txtLot.Text = cellValue;
-                                }
-                            }
-                            frm_trait.ShowDialog();
+                            frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
+                            recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
                         }
                         else
                         {
-                            frm_traitement frm_trait = new frm_traitement(this);
-                            frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
-                            frm_trait.txttype.Text = "20";
-                            frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
-                            frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
-                            frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
-                            frm_trait.txtdepot.Text = dgSource.Rows[i].Cells[7].Value.ToString();
-                            frm_trait.txtdepot1.Text = dgSource.Rows[i].Cells[8].Value.ToString();
-                            frm_trait.lbldlnoout.Text = dgSource.Rows[i].Cells[12].Value.ToString();
-                            frm_trait.cbUserCreation.Text = cbCreation;
-                            frm_trait.txtRefs.Text = txtTDD.Text;
-                            if (i == 0)
-                            {
-                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                                recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                            }
-                            else
-                            {
-                                frm_trait.txtligne.Text = recs;
-                            }
-
-                            frm_trait.ShowDialog();
+                            frm_trait.txtligne.Text = recs;
                         }
+
+                        string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
+                        string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
+                        frm_trait.ShowDialog();
 
                         string[] recup = lblrecup.Text.ToString().Split(';');
 
                         dgSource.Rows[i].Cells[0].Value = recup[0];
                         dgSource.Rows[i].Cells[1].Value = recup[1];
-                        dgSource.Rows[i].Cells[5].Value = recup[2];
                         dgSource.Rows[i].Cells[6].Value = recup[3];
-
-                        if (tester_tdd_flotserie(txtTDD.Text))
-                        {
-                            dgSource.Rows[i].Cells[11].Value = recup[4];
-                            dgSource.Rows[i].Cells[13].Value = recup[5];
-                        }
-                        else
-                        {
-                            dgSource.Rows[i].Cells[11].Value = recup[4];
-                            dgSource.Rows[i].Cells[13].Value = recup[5];
-                        }
+                        dgSource.Rows[i].Cells[12].Value = recup[5];
+                        dgSource.Rows[i].Cells[9].Value = recup[6];
 
                         Application.DoEvents();
                     }
@@ -789,9 +610,8 @@ namespace TRANSIT
 
                         foreach (DataGridViewCell cell in row.Cells)
                         {
-                            if (cell.ColumnIndex != 7 &&
-                                cell.ColumnIndex != 9 &&
-                                cell.ColumnIndex != 12)
+                            Console.WriteLine(cell.Value);
+                            if (cell.ColumnIndex != 7 && cell.ColumnIndex != 9 && cell.ColumnIndex != 11)
                             {
                                 if (cell.Value is DateTime dateValue)
                                 {
@@ -799,10 +619,15 @@ namespace TRANSIT
                                 }
                                 else
                                 {
-                                    if (cell.ColumnIndex == 10)
-                                        cells.Add("1");
-                                    else
+                                    if (cell.ColumnIndex == 8)
+                                    {
                                         cells.Add(cell.Value?.ToString() ?? "");
+                                        cells.Add("1");
+                                    }
+                                    else
+                                    {
+                                        cells.Add(cell.Value?.ToString() ?? "");
+                                    }
                                 }
                             }
                         }
@@ -852,58 +677,6 @@ namespace TRANSIT
             catch (SqlException sqlEx)
             {
                 MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connectionSource1))
-                {
-                    con.Open();
-
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = con;
-
-                        cmd.CommandText = @"
-                            DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                            ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
-                            ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
-                        cmd.ExecuteNonQuery();
-
-                        /*if (txtdateperemption.Text == "")
-                        {
-                            txtdateperemption.Text = "2000-01-01";
-                        }*/
-
-                        /*cmd.CommandText = @"
-                            INSERT INTO F_LotSerie
-                            (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut)
-                            VALUES
-                            (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut)";
-
-                        cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
-                        cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
-                        cmd.Parameters.Add("@Qte", qte);
-                        cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
-                        cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
-                        cmd.Parameters.AddWithValue("@LotSerie", lotserie);
-                        cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
-
-                        cmd.ExecuteNonQuery();*/
-
-                        cmd.CommandText = @"
-                            ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                            ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
-                            ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.Clear();
-                    }
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur SQL",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

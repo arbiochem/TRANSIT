@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.Utils.Serializing;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +17,7 @@ namespace TRANSIT
     {
         private frm_principal _frmParent;
         string lotserie = "";
-
+        string val = "";
         public frm_traitement(frm_principal frmParent)
         {
             InitializeComponent();
@@ -63,44 +64,27 @@ namespace TRANSIT
                                         return;
                                     }
 
-                                if (!string.IsNullOrWhiteSpace(txtLot.Text))
+                                if (_frmParent.val == "")
                                 {
-                                    cmd.CommandText = @"
-                                DISABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                                ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
-                                ALTER TABLE F_LotSerie NOCHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
+                                    cmd.CommandText = @"DELETE FROM F_RECUP";
                                     cmd.ExecuteNonQuery();
-
-                                    if (txtdateperemption.Text == "")
-                                    {
-                                        txtdateperemption.Text = "2000-01-01";
-                                    }
-
-                                    cmd.CommandText = @"
-                                INSERT INTO F_LotSerie
-                                (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No, LotSerie,DL_NoOut,cbCreationUser)
-                                VALUES
-                                (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No, @LotSerie, @DL_NoOut,@cbCreationUser)";
-
-                                    cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
-                                    
-                                    cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text.ToString());
-                                    cmd.Parameters.Add("@Qte",qte);
-                                    cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
-                                    cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
-                                    cmd.Parameters.AddWithValue("@LotSerie", lotserie);
-                                    cmd.Parameters.AddWithValue("@DL_NoOut", lbldlnoout.Text);
-                                    cmd.Parameters.AddWithValue("@cbCreationUser", cbUserCreation.Text);
-
-                                    //cmd.ExecuteNonQuery();
-
-                                    cmd.CommandText = @"
-                                ENABLE TRIGGER TG_INS_F_LOTSERIE ON F_LotSerie;
-                                ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_AR_Ref;
-                                ALTER TABLE F_LotSerie CHECK CONSTRAINT FKA_F_LOTSERIE_DE_NO; ";
-                                    cmd.Parameters.Clear();
-                                    cmd.Parameters.Clear();
+                                    _frmParent.val = "1";
                                 }
+
+                                int depot = 0;
+                                depot=recuperer_depots(txtdepot1.Text);
+                                cmd.CommandText = @"
+                            INSERT INTO F_RECUP
+                            (AR_Ref, LS_Peremption, LS_Lot,depot)
+                            VALUES
+                            (@AR_Ref, @Peremption, @LS_Lot,@depot)";
+
+                                cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
+                                cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
+                                cmd.Parameters.AddWithValue("@LS_Lot", txtLot.Text);
+                                cmd.Parameters.Add("@depot", SqlDbType.Int).Value = depot;
+
+                                cmd.ExecuteNonQuery();
                             }
                         }
                     }
@@ -117,9 +101,41 @@ namespace TRANSIT
                 }
 
                 _frmParent.lblrecup.Text = "";
-                _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";"+txtLot.Text+";"+ lotserie+";"+txtRefs.Text;
+                _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";"+txtLot.Text+";"+ lotserie+";"+txtRefs.Text+";"+txtdateperemption.Text;
                 this.Close();
             }
+        }
+
+        private int recuperer_depots(string cond)
+        {
+            int rec = 0;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_frmParent.connectionSource2))
+                {
+                    con.Open();
+
+                    string query = @"SELECT DE_No FROM [dbo].[F_DEPOT] WHERE DE_Intitule=@de_intitule";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@de_intitule",cond);
+
+                        object result = cmd.ExecuteScalar();
+
+                        rec = int.Parse(result.ToString());
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return rec;
         }
         private string recuperer_lotserie()
         {
@@ -194,6 +210,7 @@ namespace TRANSIT
 
         private void frmLotSerie_Load(object sender, EventArgs e)
         {
+            val = "1";
             this.ControlBox = false;
         }
     }

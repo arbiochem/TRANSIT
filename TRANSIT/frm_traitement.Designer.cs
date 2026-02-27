@@ -42,7 +42,7 @@
             this.txtqte1 = new DevExpress.XtraEditors.TextEdit();
             this.txttype = new DevExpress.XtraEditors.TextEdit();
             this.txtdepot1 = new DevExpress.XtraEditors.TextEdit();
-            this.txtRefs = new DevExpress.XtraEditors.TextEdit();
+            this.cbUserCreation = new DevExpress.XtraEditors.TextEdit();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.lblreference = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -56,9 +56,9 @@
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem10 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem11 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem12 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.cbUserCreation = new DevExpress.XtraEditors.TextEdit();
             this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem12 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.txtRefs = new DevExpress.XtraEditors.TextEdit();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
             this.dataLayoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtligne.Properties)).BeginInit();
@@ -70,7 +70,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtqte1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txttype.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtdepot1.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtRefs.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbUserCreation.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lblreference)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
@@ -84,9 +84,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbUserCreation.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtRefs.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // dataLayoutControl1
@@ -132,7 +132,7 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(239, 272);
+            this.labelControl1.Location = new System.Drawing.Point(239, 298);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(164, 16);
             this.labelControl1.StyleController = this.dataLayoutControl1;
@@ -162,7 +162,7 @@
             // txtLot
             // 
             this.txtLot.Enabled = false;
-            this.txtLot.Location = new System.Drawing.Point(137, 64);
+            this.txtLot.Location = new System.Drawing.Point(137, 38);
             this.txtLot.Name = "txtLot";
             this.txtLot.Size = new System.Drawing.Size(266, 22);
             this.txtLot.StyleController = this.dataLayoutControl1;
@@ -197,7 +197,7 @@
             // 
             // txtqte1
             // 
-            this.txtqte1.Location = new System.Drawing.Point(137, 292);
+            this.txtqte1.Location = new System.Drawing.Point(137, 272);
             this.txtqte1.Name = "txtqte1";
             this.txtqte1.Size = new System.Drawing.Size(266, 22);
             this.txtqte1.StyleController = this.dataLayoutControl1;
@@ -221,14 +221,14 @@
             this.txtdepot1.StyleController = this.dataLayoutControl1;
             this.txtdepot1.TabIndex = 6;
             // 
-            // txtRefs
+            // cbUserCreation
             // 
-            this.txtRefs.Enabled = false;
-            this.txtRefs.Location = new System.Drawing.Point(137, 38);
-            this.txtRefs.Name = "txtRefs";
-            this.txtRefs.Size = new System.Drawing.Size(266, 22);
-            this.txtRefs.StyleController = this.dataLayoutControl1;
-            this.txtRefs.TabIndex = 7;
+            this.cbUserCreation.Enabled = false;
+            this.cbUserCreation.Location = new System.Drawing.Point(137, 12);
+            this.cbUserCreation.Name = "cbUserCreation";
+            this.cbUserCreation.Size = new System.Drawing.Size(266, 22);
+            this.cbUserCreation.StyleController = this.dataLayoutControl1;
+            this.cbUserCreation.TabIndex = 7;
             // 
             // Root
             // 
@@ -311,7 +311,7 @@
             this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem6.Control = this.labelControl1;
             this.layoutControlItem6.CustomizationFormText = "MODIFICATION";
-            this.layoutControlItem6.Location = new System.Drawing.Point(0, 260);
+            this.layoutControlItem6.Location = new System.Drawing.Point(0, 286);
             this.layoutControlItem6.Name = "layoutControlItem6";
             this.layoutControlItem6.Size = new System.Drawing.Size(395, 20);
             this.layoutControlItem6.Text = "MODIFICATION";
@@ -334,7 +334,7 @@
             this.layoutControlItem7.Control = this.txtqte1;
             this.layoutControlItem7.ControlAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.layoutControlItem7.CustomizationFormText = "Qté";
-            this.layoutControlItem7.Location = new System.Drawing.Point(0, 280);
+            this.layoutControlItem7.Location = new System.Drawing.Point(0, 260);
             this.layoutControlItem7.Name = "layoutControlItem7";
             this.layoutControlItem7.Size = new System.Drawing.Size(395, 26);
             this.layoutControlItem7.Text = "Qté";
@@ -354,7 +354,7 @@
             // layoutControlItem4
             // 
             this.layoutControlItem4.Control = this.txtLot;
-            this.layoutControlItem4.Location = new System.Drawing.Point(0, 52);
+            this.layoutControlItem4.Location = new System.Drawing.Point(0, 26);
             this.layoutControlItem4.Name = "layoutControlItem4";
             this.layoutControlItem4.Size = new System.Drawing.Size(395, 26);
             this.layoutControlItem4.Text = "Nom du lot";
@@ -381,26 +381,6 @@
             this.layoutControlItem11.TextVisible = false;
             this.layoutControlItem11.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             // 
-            // layoutControlItem12
-            // 
-            this.layoutControlItem12.Control = this.txtRefs;
-            this.layoutControlItem12.ControlAlignment = System.Drawing.ContentAlignment.TopLeft;
-            this.layoutControlItem12.CustomizationFormText = "Nom du lot";
-            this.layoutControlItem12.Location = new System.Drawing.Point(0, 26);
-            this.layoutControlItem12.Name = "layoutControlItem12";
-            this.layoutControlItem12.Size = new System.Drawing.Size(395, 26);
-            this.layoutControlItem12.Text = "Référence";
-            this.layoutControlItem12.TextSize = new System.Drawing.Size(113, 16);
-            // 
-            // cbUserCreation
-            // 
-            this.cbUserCreation.Enabled = false;
-            this.cbUserCreation.Location = new System.Drawing.Point(137, 12);
-            this.cbUserCreation.Name = "cbUserCreation";
-            this.cbUserCreation.Size = new System.Drawing.Size(266, 22);
-            this.cbUserCreation.StyleController = this.dataLayoutControl1;
-            this.cbUserCreation.TabIndex = 7;
-            // 
             // layoutControlItem13
             // 
             this.layoutControlItem13.Control = this.cbUserCreation;
@@ -411,6 +391,26 @@
             this.layoutControlItem13.Size = new System.Drawing.Size(395, 26);
             this.layoutControlItem13.Text = "CBUserCreation";
             this.layoutControlItem13.TextSize = new System.Drawing.Size(113, 16);
+            // 
+            // layoutControlItem12
+            // 
+            this.layoutControlItem12.Control = this.txtRefs;
+            this.layoutControlItem12.ControlAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.layoutControlItem12.CustomizationFormText = "Nom du lot";
+            this.layoutControlItem12.Location = new System.Drawing.Point(0, 52);
+            this.layoutControlItem12.Name = "layoutControlItem12";
+            this.layoutControlItem12.Size = new System.Drawing.Size(395, 26);
+            this.layoutControlItem12.Text = "Référence doc";
+            this.layoutControlItem12.TextSize = new System.Drawing.Size(113, 16);
+            // 
+            // txtRefs
+            // 
+            this.txtRefs.Enabled = false;
+            this.txtRefs.Location = new System.Drawing.Point(137, 64);
+            this.txtRefs.Name = "txtRefs";
+            this.txtRefs.Size = new System.Drawing.Size(266, 22);
+            this.txtRefs.StyleController = this.dataLayoutControl1;
+            this.txtRefs.TabIndex = 7;
             // 
             // frm_traitement
             // 
@@ -435,7 +435,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtqte1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txttype.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtdepot1.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtRefs.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbUserCreation.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lblreference)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
@@ -449,9 +449,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbUserCreation.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtRefs.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -484,9 +484,9 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem10;
         public DevExpress.XtraEditors.LabelControl lbldlnoout;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem11;
-        public DevExpress.XtraEditors.TextEdit txtRefs;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem12;
         public DevExpress.XtraEditors.TextEdit cbUserCreation;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem13;
+        public DevExpress.XtraEditors.TextEdit txtRefs;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem12;
     }
 }
