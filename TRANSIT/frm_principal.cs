@@ -607,28 +607,40 @@ namespace TRANSIT
                     if (!row.IsNewRow)
                     {
                         List<string> cells = new List<string>();
+                        string rect = "";
 
+                        // Premier foreach : récupérer rect
                         foreach (DataGridViewCell cell in row.Cells)
                         {
-                            Console.WriteLine(cell.Value);
-                            if (cell.ColumnIndex != 7 && cell.ColumnIndex != 9 && cell.ColumnIndex != 11)
+                            if (cell.ColumnIndex == 3)
                             {
-                                if (cell.Value is DateTime dateValue)
-                                {
-                                    cells.Add(dateValue.ToString("yyyyMMdd"));
-                                }
-                                else
-                                {
-                                    if (cell.ColumnIndex == 8)
-                                    {
-                                        cells.Add(cell.Value?.ToString() ?? "");
-                                        cells.Add("1");
-                                    }
-                                    else
-                                    {
-                                        cells.Add(cell.Value?.ToString() ?? "");
-                                    }
-                                }
+                                rect = cell.Value?.ToString() ?? "";
+                            }
+                        }
+
+                        // Deuxième foreach : construire cells
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            // Ignorer les colonnes 7, 9, 11
+                            if (cell.ColumnIndex == 7 || cell.ColumnIndex == 9 || cell.ColumnIndex == 11)
+                                continue;
+
+                            // Ignorer colonne 6 si rect commence par "MAT"
+                            if (rect.StartsWith("MAT") && cell.ColumnIndex == 6)
+                                continue;
+
+                            if (cell.Value is DateTime dateValue)
+                            {
+                                cells.Add(dateValue.ToString("yyyyMMdd"));
+                            }
+                            else if (cell.ColumnIndex == 8)
+                            {
+                                cells.Add(cell.Value?.ToString() ?? "");
+                                cells.Add("1"); // ✅ toujours ajouter "1" après colonne 8
+                            }
+                            else
+                            {
+                                cells.Add(cell.Value?.ToString() ?? "");
                             }
                         }
 

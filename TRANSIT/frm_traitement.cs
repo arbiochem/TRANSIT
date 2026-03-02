@@ -66,8 +66,8 @@ namespace TRANSIT
 
                                 if (_frmParent.val == "")
                                 {
-                                    cmd.CommandText = @"DELETE FROM F_RECUP";
-                                    cmd.ExecuteNonQuery();
+                                    //cmd.CommandText = @"DELETE FROM F_RECUP";
+                                    //cmd.ExecuteNonQuery();
                                     _frmParent.val = "1";
                                 }
 
@@ -75,16 +75,19 @@ namespace TRANSIT
                                 depot=recuperer_depots(txtdepot1.Text);
                                 cmd.CommandText = @"
                             INSERT INTO F_RECUP
-                            (AR_Ref, LS_Peremption, LS_Lot,depot)
+                            (reference, LS_Peremption, LS_Lot,depot)
                             VALUES
-                            (@AR_Ref, @Peremption, @LS_Lot,@depot)";
+                            (@reference, @Peremption, @LS_Lot,@depot)";
 
-                                cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
+                                cmd.Parameters.AddWithValue("@reference", txtreference.Text);
                                 cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
                                 cmd.Parameters.AddWithValue("@LS_Lot", txtLot.Text);
                                 cmd.Parameters.Add("@depot", SqlDbType.Int).Value = depot;
 
-                                cmd.ExecuteNonQuery();
+                                if (!txtreference.Text.StartsWith("MAT"))
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
                             }
                         }
                     }
