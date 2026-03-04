@@ -38,6 +38,7 @@ namespace TRANSIT
         public string connectionSource1 = "";
         public string connectionSource2 = "";
         public string val = "";
+        private bool is_email = false;
 
         private async Task EnvoyerMailAvecMailKit(string filePath, string destinataire)
         {
@@ -86,7 +87,7 @@ namespace TRANSIT
 
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
-
+                    is_email = true;
                 }
             }
             catch (Exception ex)
@@ -649,17 +650,24 @@ namespace TRANSIT
                 }
             }
 
+            if (is_email)
+            {
+                MessageBox.Show("E-mail déjà envoyé pour ce document!!!!",
+                                       "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                // 🔹 Envoi du mail avec la pièce jointe
+                EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
+                EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
+                EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
 
-            // 🔹 Envoi du mail avec la pièce jointe
-            EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
-            EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
-            EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
 
+                MessageBox.Show("Email envoyé avec succès !", "Succès",
+                                       MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            MessageBox.Show("Email envoyé avec succès !", "Succès",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            maj_numero();
+                maj_numero();
+            }
         }
 
         private void maj_numero()

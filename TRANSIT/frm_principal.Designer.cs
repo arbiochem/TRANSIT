@@ -43,6 +43,7 @@
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.dgSource = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.cmbdepot = new System.Windows.Forms.ComboBox();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.lblrecup = new DevExpress.XtraEditors.LabelControl();
@@ -55,7 +56,6 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
@@ -127,12 +127,16 @@
             // 
             // btn_save
             // 
+            this.btn_save.Appearance.BackColor = System.Drawing.Color.Green;
             this.btn_save.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_save.Appearance.ForeColor = System.Drawing.Color.White;
+            this.btn_save.Appearance.Options.UseBackColor = true;
             this.btn_save.Appearance.Options.UseFont = true;
+            this.btn_save.Appearance.Options.UseForeColor = true;
             this.btn_save.Enabled = false;
-            this.btn_save.Location = new System.Drawing.Point(1120, 45);
+            this.btn_save.Location = new System.Drawing.Point(971, 45);
             this.btn_save.Name = "btn_save";
-            this.btn_save.Size = new System.Drawing.Size(328, 27);
+            this.btn_save.Size = new System.Drawing.Size(477, 27);
             this.btn_save.StyleController = this.dataLayoutControl1;
             this.btn_save.TabIndex = 10;
             this.btn_save.Text = "Envoyer";
@@ -140,12 +144,16 @@
             // 
             // btn_lancer
             // 
+            this.btn_lancer.Appearance.BackColor = System.Drawing.Color.Green;
             this.btn_lancer.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_lancer.Appearance.ForeColor = System.Drawing.Color.White;
+            this.btn_lancer.Appearance.Options.UseBackColor = true;
             this.btn_lancer.Appearance.Options.UseFont = true;
+            this.btn_lancer.Appearance.Options.UseForeColor = true;
             this.btn_lancer.Enabled = false;
             this.btn_lancer.Location = new System.Drawing.Point(12, 45);
             this.btn_lancer.Name = "btn_lancer";
-            this.btn_lancer.Size = new System.Drawing.Size(1104, 27);
+            this.btn_lancer.Size = new System.Drawing.Size(955, 27);
             this.btn_lancer.StyleController = this.dataLayoutControl1;
             this.btn_lancer.TabIndex = 9;
             this.btn_lancer.Text = "Lancer le traitement ...";
@@ -153,8 +161,12 @@
             // 
             // btn_lister
             // 
+            this.btn_lister.Appearance.BackColor = System.Drawing.Color.Green;
             this.btn_lister.Appearance.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_lister.Appearance.ForeColor = System.Drawing.Color.White;
+            this.btn_lister.Appearance.Options.UseBackColor = true;
             this.btn_lister.Appearance.Options.UseFont = true;
+            this.btn_lister.Appearance.Options.UseForeColor = true;
             this.btn_lister.Enabled = false;
             this.btn_lister.Location = new System.Drawing.Point(1385, 12);
             this.btn_lister.Name = "btn_lister";
@@ -184,7 +196,7 @@
             this.layoutControlItem5.Control = this.btn_lancer;
             this.layoutControlItem5.Location = new System.Drawing.Point(0, 31);
             this.layoutControlItem5.Name = "layoutControlItem5";
-            this.layoutControlItem5.Size = new System.Drawing.Size(1108, 36);
+            this.layoutControlItem5.Size = new System.Drawing.Size(959, 36);
             this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem5.TextVisible = false;
             // 
@@ -193,9 +205,9 @@
             this.layoutControlItem6.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem6.Control = this.btn_save;
-            this.layoutControlItem6.Location = new System.Drawing.Point(1108, 31);
+            this.layoutControlItem6.Location = new System.Drawing.Point(959, 31);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(332, 36);
+            this.layoutControlItem6.Size = new System.Drawing.Size(481, 36);
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
             // 
@@ -248,6 +260,15 @@
             this.groupControl1.Size = new System.Drawing.Size(1460, 124);
             this.groupControl1.TabIndex = 4;
             this.groupControl1.Text = "Options";
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Appearance.ForeColor = System.Drawing.Color.White;
+            this.labelControl2.Appearance.Options.UseForeColor = true;
+            this.labelControl2.Location = new System.Drawing.Point(829, 46);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(0, 16);
+            this.labelControl2.TabIndex = 22;
             // 
             // cmbdepot
             // 
@@ -366,16 +387,6 @@
             this.layoutControlItem3.Size = new System.Drawing.Size(1464, 95);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
-            //this.layoutControlItem3.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-            // 
-            // labelControl2
-            // 
-            this.labelControl2.Appearance.ForeColor = System.Drawing.Color.White;
-            this.labelControl2.Appearance.Options.UseForeColor = true;
-            this.labelControl2.Location = new System.Drawing.Point(829, 46);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(0, 16);
-            this.labelControl2.TabIndex = 22;
             // 
             // frm_principal
             // 
