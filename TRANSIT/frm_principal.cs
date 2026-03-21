@@ -661,6 +661,7 @@ namespace TRANSIT
                 EnvoyerMailAvecMailKit(fichier, "todisoa.rakotoarijaona@arbiochem.mg");
                 EnvoyerMailAvecMailKit(fichier, "rija.razanakoto@arbiochem.mg");
                 EnvoyerMailAvecMailKit(fichier, "mounisse.ali@arbiochem.mg");
+                EnvoyerMailAvecMailKit(fichier, "glpi@arbiochem.mg");
 
 
                 MessageBox.Show("Email envoyé avec succès !", "Succès",
