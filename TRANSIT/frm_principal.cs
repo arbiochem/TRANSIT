@@ -158,6 +158,7 @@ namespace TRANSIT
         string cbCreation;
         private void frm_principal_Load(object sender, EventArgs e)
         {
+            dgSource.DataError += (s, ev) => { ev.Cancel = true; };
             using (frm_login f = new frm_login())
             {
                 f.StartPosition = FormStartPosition.CenterParent;
@@ -340,7 +341,7 @@ namespace TRANSIT
                         FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
                         doc.AR_Ref,
                         doc.DL_Design,
-                        CAST(doc.DL_Qte AS INT) AS DL_Qte,
+                        CAST(doc.DL_Qte AS DECIMAL(24,6)) AS DL_Qte,
                         lot.LS_NoSerie,
                         f.DE_Intitule,
                         lot.LS_PEREMPTION,
@@ -354,7 +355,10 @@ namespace TRANSIT
                        AND lot.AR_Ref = doc.AR_Ref
                     WHERE doc.DO_Piece = @DoPiece
                       AND doc.DL_Qte IS NOT NULL
-                      AND doc.DL_Qte <> 0";
+                      AND doc.DL_Qte <> 0 
+                      AND (doc.DL_DESIGN <> '' and doc.DL_DESIGN IS NOT NULL)
+                    ";
+                      
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
@@ -427,7 +431,7 @@ namespace TRANSIT
                         if (dgSource.Columns.Contains("DL_Qte"))
                         {
                             dgSource.Columns["DL_Qte"].HeaderText = "Quantité";
-                            dgSource.Columns["DL_Qte"].DefaultCellStyle.Format = "N0"; // N0 = nombre avec 0 décimale et séparateur de milliers
+                            //dgSource.Columns["DL_Qte"].DefaultCellStyle.Format = "N0"; // N0 = nombre avec 0 décimale et séparateur de milliers
                             dgSource.Columns["DL_Qte"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                         }
                     }
@@ -441,6 +445,8 @@ namespace TRANSIT
             {
                 //MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            dgSource.Columns["DL_Qte"].ValueType = typeof(string);
         }
 
         bool tester_lancement(string cond)
@@ -490,6 +496,8 @@ namespace TRANSIT
 
                 // Affichage"Lot
 
+                dgSource.Columns[5].ValueType = typeof(decimal);
+
                 if (dgSource.Rows.Count > 0)
                 {
                     string recs = "";
@@ -505,7 +513,19 @@ namespace TRANSIT
                         frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
                         frm_trait.txttype.Text = "20";
                         frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
-                        frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
+                        //frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
+                        string valBrute = dgSource.Rows[i].Cells[5].Value?.ToString()
+                          .Replace(",", ".").Trim();
+
+                                if (decimal.TryParse(valBrute, NumberStyles.Any,
+                                                     CultureInfo.InvariantCulture, out decimal val))
+                                {
+                                    frm_trait.txtqte1.Text = val.ToString("G29", CultureInfo.CurrentCulture); // "98,75"
+                                }
+                                else
+                                {
+                                    frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value?.ToString();
+                                }
                         frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
                         frm_trait.txtRefs.Text = txtTDD.Text;
                         frm_trait.txtdepot.Text = cmbBase.Text.ToString();
@@ -541,6 +561,13 @@ namespace TRANSIT
                         dgSource.Rows[i].Cells[0].Value = recup[0];
                         dgSource.Rows[i].Cells[1].Value = recup[1];
                         dgSource.Rows[i].Cells[6].Value = recup[3];
+
+                        decimal.TryParse(recup[2].Replace(",", ".").Trim(),
+                         NumberStyles.Any,
+                         CultureInfo.InvariantCulture,
+                         out decimal qtes);
+                                dgSource.Rows[i].Cells[5].Value = qtes;
+
                         dgSource.Rows[i].Cells[12].Value = recup[5];
                         dgSource.Rows[i].Cells[9].Value = recup[6];
 
