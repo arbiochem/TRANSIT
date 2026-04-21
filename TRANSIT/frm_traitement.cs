@@ -61,76 +61,6 @@ namespace TRANSIT
             }
             else
             {
-                //Insertion dans F_LotSerie
-                /*if (txtLot.Text == "")
-                {
-                    txtLot.Text = "LOT";
-                }
-
-
-                if (txtLot.Text != "")
-                {
-                    lotserie = recuperer_lotserie();
-
-                    try
-                    {
-                        using (SqlConnection con = new SqlConnection(_frmParent.connectionSource2))
-                        {
-                            con.Open();
-
-                            using (SqlCommand cmd = new SqlCommand())
-                            {
-                                cmd.Connection = con;
-
-                                if (!decimal.TryParse(
-                                    txtqte1.Text.Trim(),
-                                    NumberStyles.Any,
-                                    CultureInfo.InvariantCulture,
-                                    out decimal qte))
-                                    {
-                                        MessageBox.Show("Quantité invalide");
-                                        return;
-                                    }
-
-                                if (_frmParent.val == "")
-                                {
-                                    //cmd.CommandText = @"DELETE FROM F_RECUP";
-                                    //cmd.ExecuteNonQuery();
-                                    _frmParent.val = "1";
-                                }
-
-                                int depot = 0;
-                                depot=recuperer_depots(txtdepot1.Text);
-                                cmd.CommandText = @"
-                            INSERT INTO F_RECUP
-                            (reference, LS_Peremption, LS_Lot,depot)
-                            VALUES
-                            (@reference, @Peremption, @LS_Lot,@depot)";
-
-                                cmd.Parameters.AddWithValue("@reference", txtreference.Text);
-                                cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
-                                cmd.Parameters.AddWithValue("@LS_Lot", txtLot.Text);
-                                cmd.Parameters.Add("@depot", SqlDbType.Int).Value = depot;
-
-                                if (!txtreference.Text.StartsWith("MAT"))
-                                {
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-                        }
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        MessageBox.Show($"Erreur SQL : {sqlEx.Message}", "Erreur SQL",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erreur : {ex.Message}", "Erreur",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }*/
-
                 int DL_NoIn = 0;
                 if (txtLot.Text != "")
                 {
@@ -244,16 +174,11 @@ namespace TRANSIT
                                     ALTER TABLE F_LotSerie NOCHECK CONSTRAINT ALL;";
                                     cmd.ExecuteNonQuery();
 
-                                    if (txtdateperemption.Text == "")
-                                    {
-                                        txtdateperemption.Text = "2026-12-31";
-                                    }
-
                                     cmd.CommandText = @"
                                     INSERT INTO F_LotSerie
-                                    (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No,LS_Fabrication,cbCreationUser,DL_NoIn,LS_LotEpuise,LS_MvtStock,DL_NoOut,LS_Complement)
+                                    (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No,LS_Fabrication,cbCreationUser,DL_NoIn,LS_LotEpuise,LS_MvtStock,DL_NoOut,LS_Complement,LS_QteRes)
                                     VALUES
-                                    (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No,@lsfabrication, @user,@dlnoin,0,1,0,@lscomplement)";
+                                    (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No,@lsfabrication, @user,@dlnoin,0,1,0,@lscomplement,0)";
                                    
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                                     cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
