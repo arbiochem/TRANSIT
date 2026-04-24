@@ -480,6 +480,8 @@ namespace TRANSIT
 
         private void btn_lancer_Click(object sender, EventArgs e)
         {
+            cmbdepot.Enabled = false;
+
             if (!tester_lancement(txtTDD.Text))
             {
                 TextEdit textEdit = new TextEdit();
