@@ -159,7 +159,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
                                     cmd.Parameters.AddWithValue("@user", cbUserCreation.Text);
                                     cmd.Parameters.AddWithValue("@eu_enumere", recuperer_unite(txtreference.Text));
-                                    cmd.Parameters.AddWithValue("@DL_Qte", txtqte1.Text);
+                                    cmd.Parameters.AddWithValue("@DL_Qte", txtqte1.Text.Replace(",","."));
 
                                     DL_NoIn = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -452,6 +452,30 @@ namespace TRANSIT
         {
             val = "1";
             this.ControlBox = false;
+        }
+
+        private void txtqte1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                // Autoriser : chiffres, virgule, backspace
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != (char)Keys.Back && e.KeyChar != '.')
+                {
+                    e.Handled = true; // bloque la touche
+                }
+
+                // Empêcher plusieurs virgules
+                if (e.KeyChar == ',' && ((TextBox)sender).Text.Contains(","))
+                {
+                    e.Handled = true;
+                }
+
+                if (e.KeyChar == '.' && ((TextBox)sender).Text.Contains("."))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex) { }
         }
     }
 }
