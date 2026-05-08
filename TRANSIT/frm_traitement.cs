@@ -424,7 +424,7 @@ namespace TRANSIT
                 {
                     con.Open();
 
-                    string query = @"SELECT DE_No FROM [dbo].[F_Depot] WHERE DE_Intitule LIKE '%"+cond+"%'";
+                    string query = @"SELECT DE_No FROM [dbo].[F_Depot] WHERE DE_Intitule = '"+cond.Trim()+"'";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {

@@ -480,108 +480,131 @@ namespace TRANSIT
 
         private void btn_lancer_Click(object sender, EventArgs e)
         {
-            cmbdepot.Enabled = false;
-
-            if (!tester_lancement(txtTDD.Text))
+            if (cmbdepot.SelectedIndex == 0)
             {
-                TextEdit textEdit = new TextEdit();
-                textEdit.Properties.UseSystemPasswordChar = true; // 👈 mode password
-                textEdit.Properties.PasswordChar = '●'; // optionnel
-                textEdit.Width = 200;
-
-                // Arguments de l'InputBox
-                XtraInputBoxArgs args = new XtraInputBoxArgs();
-                args.Caption = "Mot de passe";
-                args.Prompt = "Entrez le mot de passe";
-                args.DefaultButtonIndex = 0;
-                args.Editor = textEdit;
-
-                // Affichage"Lot
-
-                dgSource.Columns[5].ValueType = typeof(decimal);
-
-                if (dgSource.Rows.Count > 0)
-                {
-                    string recs = "";
-                    for (int i = 0; i < dgSource.Rows.Count - 1; i++)
-                    {
-                        if (i > 0 && i < dgSource.Rows.Count - 1)
-                        {
-                            dgSource.Rows[i - 1].Selected = false;
-                            dgSource.Rows[i].Selected = true;
-                        }
-
-                        frm_traitement frm_trait = new frm_traitement(this);
-                        frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
-                        frm_trait.txttype.Text = "20";
-                        frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
-                        //frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
-                        string valBrute = dgSource.Rows[i].Cells[5].Value?.ToString()
-                          .Replace(",", ".").Trim();
-
-                                if (decimal.TryParse(valBrute, NumberStyles.Any,
-                                                     CultureInfo.InvariantCulture, out decimal val))
-                                {
-                                    frm_trait.txtqte1.Text = val.ToString("G29", CultureInfo.CurrentCulture); // "98,75"
-                                }
-                                else
-                                {
-                                    frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value?.ToString();
-                                }
-                        frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
-                        frm_trait.txtRefs.Text = txtTDD.Text;
-                        frm_trait.txtdepot.Text = cmbBase.Text.ToString();
-                        frm_trait.txtdepot1.Text = cmbdepot.Text.ToString();
-
-                        string cellValuelot = dgSource.Rows[i].Cells[6].Value?.ToString();
-
-                        frm_trait.txtLot.Text = !string.IsNullOrWhiteSpace(cellValuelot) ? cellValuelot : "LOT";
-
-                        string cellValueperemption = dgSource.Rows[i].Cells[9].Value?.ToString();
-
-                        frm_trait.txtdateperemption.Text = !string.IsNullOrWhiteSpace(cellValueperemption)
-                        ? cellValueperemption
-                        : $"{DateTime.Now.Year}-12-31";
-
-                        frm_trait.cbUserCreation.Text = cbCreation;
-                        if (i == 0)
-                        {
-                            frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                            recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
-                        }
-                        else
-                        {
-                            frm_trait.txtligne.Text = recs;
-                        }
-
-                        string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
-                        string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
-                        frm_trait.ShowDialog();
-
-                        string[] recup = lblrecup.Text.ToString().Split(';');
-
-                        dgSource.Rows[i].Cells[0].Value = recup[0];
-                        dgSource.Rows[i].Cells[1].Value = recup[1];
-                        dgSource.Rows[i].Cells[6].Value = recup[3];
-
-                        decimal.TryParse(recup[2].Replace(",", ".").Trim(),
-                         NumberStyles.Any,
-                         CultureInfo.InvariantCulture,
-                         out decimal qtes);
-                                dgSource.Rows[i].Cells[5].Value = qtes;
-
-                        dgSource.Rows[i].Cells[12].Value = recup[5];
-                        dgSource.Rows[i].Cells[9].Value = recup[6];
-
-                        Application.DoEvents();
-                    }
-                }
-
-                btn_save.Enabled = true;
+                MessageBox.Show("Aucun dépot de destination n'a été sélectionné!!!!", "Message d'erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-            {
-                MessageBox.Show("Ce TDD est déjà traité!!!!", "Message d'erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else { 
+                cmbdepot.Enabled = false;
+
+                if (!tester_lancement(txtTDD.Text))
+                {
+                    TextEdit textEdit = new TextEdit();
+                    textEdit.Properties.UseSystemPasswordChar = true; // 👈 mode password
+                    textEdit.Properties.PasswordChar = '●'; // optionnel
+                    textEdit.Width = 200;
+
+                    // Arguments de l'InputBox
+                    XtraInputBoxArgs args = new XtraInputBoxArgs();
+                    args.Caption = "Mot de passe";
+                    args.Prompt = "Entrez le mot de passe";
+                    args.DefaultButtonIndex = 0;
+                    args.Editor = textEdit;
+
+                    // Affichage"Lot
+
+                    dgSource.Columns[5].ValueType = typeof(decimal);
+
+                    if (dgSource.Rows.Count > 0)
+                    {
+                        string recs = "";
+                        for (int i = 0; i < dgSource.Rows.Count - 1; i++)
+                        {
+                            if (i > 0 && i < dgSource.Rows.Count - 1)
+                            {
+                                dgSource.Rows[i - 1].Selected = false;
+                                dgSource.Rows[i].Selected = true;
+                            }
+
+                            frm_traitement frm_trait = new frm_traitement(this);
+                            frm_trait.Text = "TRAITEMENT DE " + dgSource.Rows[i].Cells[1].Value.ToString();
+                            frm_trait.txttype.Text = "20";
+                            frm_trait.txtdesignation.Text = dgSource.Rows[i].Cells[4].Value.ToString();
+                            //frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value.ToString();
+                            string valBrute = dgSource.Rows[i].Cells[5].Value?.ToString()
+                              .Replace(",", ".").Trim();
+
+                            if (decimal.TryParse(valBrute, NumberStyles.Any,
+                                                 CultureInfo.InvariantCulture, out decimal val))
+                            {
+                                frm_trait.txtqte1.Text = val.ToString("G29", CultureInfo.CurrentCulture); // "98,75"
+                            }
+                            else
+                            {
+                                frm_trait.txtqte1.Text = dgSource.Rows[i].Cells[5].Value?.ToString();
+                            }
+                            frm_trait.txtreference.Text = dgSource.Rows[i].Cells[3].Value.ToString();
+                            frm_trait.txtRefs.Text = txtTDD.Text;
+                            frm_trait.txtdepot.Text = cmbBase.Text.ToString();
+                            frm_trait.txtdepot1.Text = cmbdepot.Text.ToString();
+
+                            string cellValuelot = dgSource.Rows[i].Cells[6].Value?.ToString();
+
+                            frm_trait.txtLot.Text = !string.IsNullOrWhiteSpace(cellValuelot) ? cellValuelot : "LOT";
+
+                            string cellValueperemption = dgSource.Rows[i].Cells[9].Value?.ToString();
+
+                            // Affecter la valeur brute à frm_trait
+                            string dateTexte = !string.IsNullOrWhiteSpace(cellValueperemption)
+                                ? cellValueperemption
+                                : $"{DateTime.Now.Year}-12-31";
+
+                            // Parser depuis dateTexte (pas depuis frm_trait.txtdateperemption.Text)
+                            if (DateTime.TryParseExact(
+                                    dateTexte,
+                                    "yyyy-MM-dd",
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None,
+                                    out DateTime date))
+                            {
+                                frm_trait.txtdateperemption.Text = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                            }
+                            else
+                            {
+                                frm_trait.txtdateperemption.Text = $"{DateTime.Now.Year}-12-31 00:00:00.000";
+                            }
+
+
+                            frm_trait.cbUserCreation.Text = cbCreation;
+                            if (i == 0)
+                            {
+                                frm_trait.txtligne.Text = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
+                                recs = "ME" + recuperer_last_numero().ToString().PadLeft(5, '0');
+                            }
+                            else
+                            {
+                                frm_trait.txtligne.Text = recs;
+                            }
+
+                            string cellValues = Convert.ToString(dgSource.Rows[i].Cells[4].Value);
+                            string cellValue = Convert.ToString(dgSource.Rows[i].Cells[6].Value);
+                            frm_trait.ShowDialog();
+
+                            string[] recup = lblrecup.Text.ToString().Split(';');
+
+                            dgSource.Rows[i].Cells[0].Value = recup[0];
+                            dgSource.Rows[i].Cells[1].Value = recup[1];
+                            dgSource.Rows[i].Cells[6].Value = recup[3];
+
+                            decimal.TryParse(recup[2].Replace(",", ".").Trim(),
+                             NumberStyles.Any,
+                             CultureInfo.InvariantCulture,
+                             out decimal qtes);
+                            dgSource.Rows[i].Cells[5].Value = qtes;
+
+                            dgSource.Rows[i].Cells[12].Value = recup[5];
+                            dgSource.Rows[i].Cells[9].Value = recup[6];
+
+                            Application.DoEvents();
+                        }
+                    }
+
+                    btn_save.Enabled = true;
+                }
+                else
+                {
+                    MessageBox.Show("Ce TDD est déjà traité!!!!", "Message d'erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
