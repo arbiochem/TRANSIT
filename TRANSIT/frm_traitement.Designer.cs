@@ -132,7 +132,7 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(239, 298);
+            this.labelControl1.Location = new System.Drawing.Point(239, 272);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(164, 16);
             this.labelControl1.StyleController = this.dataLayoutControl1;
@@ -197,7 +197,7 @@
             // 
             // txtqte1
             // 
-            this.txtqte1.Location = new System.Drawing.Point(137, 272);
+            this.txtqte1.Location = new System.Drawing.Point(137, 292);
             this.txtqte1.Name = "txtqte1";
             this.txtqte1.Size = new System.Drawing.Size(266, 22);
             this.txtqte1.StyleController = this.dataLayoutControl1;
@@ -250,7 +250,6 @@
             this.layoutControlItem3,
             this.layoutControlItem5,
             this.layoutControlItem1,
-            this.layoutControlItem6,
             this.layoutControlItem8,
             this.layoutControlItem7,
             this.layoutControlItem9,
@@ -258,7 +257,8 @@
             this.layoutControlItem10,
             this.layoutControlItem11,
             this.layoutControlItem12,
-            this.layoutControlItem13});
+            this.layoutControlItem13,
+            this.layoutControlItem6});
             this.Root.Name = "Root";
             this.Root.Size = new System.Drawing.Size(415, 381);
             this.Root.TextVisible = false;
@@ -321,7 +321,7 @@
             this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
             this.layoutControlItem6.Control = this.labelControl1;
             this.layoutControlItem6.CustomizationFormText = "MODIFICATION";
-            this.layoutControlItem6.Location = new System.Drawing.Point(0, 286);
+            this.layoutControlItem6.Location = new System.Drawing.Point(0, 260);
             this.layoutControlItem6.Name = "layoutControlItem6";
             this.layoutControlItem6.Size = new System.Drawing.Size(395, 20);
             this.layoutControlItem6.Text = "MODIFICATION";
@@ -344,7 +344,7 @@
             this.layoutControlItem7.Control = this.txtqte1;
             this.layoutControlItem7.ControlAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.layoutControlItem7.CustomizationFormText = "Qté";
-            this.layoutControlItem7.Location = new System.Drawing.Point(0, 260);
+            this.layoutControlItem7.Location = new System.Drawing.Point(0, 280);
             this.layoutControlItem7.Name = "layoutControlItem7";
             this.layoutControlItem7.Size = new System.Drawing.Size(395, 26);
             this.layoutControlItem7.Text = "Qté";
