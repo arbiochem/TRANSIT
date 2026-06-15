@@ -105,7 +105,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DO_PIECE", txtligne.Text);
                                     cmd.Parameters.AddWithValue("@DO_DOMAINE",2);
                                     cmd.Parameters.Add("@DO_TYPE", 20);
-                                    cmd.Parameters.AddWithValue("@DO_DATE", Convert.ToDateTime(DateTime.Now));
+                                    cmd.Parameters.AddWithValue("@DO_DATE", Convert.ToDateTime(DateTime.Now).Date);
                                     cmd.Parameters.AddWithValue("@DO_REF", txtRefs.Text);
                                     cmd.Parameters.AddWithValue("@DO_TIERS", recuperer_depot(txtdepot1.Text));
                                     cmd.Parameters.AddWithValue("@DO_DOCTYPE", 20);
@@ -152,7 +152,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DO_PIECE", txtligne.Text);
                                     cmd.Parameters.AddWithValue("@DO_DOMAINE", 2);
                                     cmd.Parameters.Add("@DO_TYPE", 20);
-                                    cmd.Parameters.AddWithValue("@DO_DATE", Convert.ToDateTime(DateTime.Now));
+                                    cmd.Parameters.AddWithValue("@DO_DATE", Convert.ToDateTime(DateTime.Now).Date);
                                     cmd.Parameters.AddWithValue("@AR_REF", txtreference.Text);
                                     cmd.Parameters.AddWithValue("@DL_Design", txtdesignation.Text);
                                     cmd.Parameters.AddWithValue("@CT_Num", 1);
@@ -183,9 +183,9 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                                     cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
                                     cmd.Parameters.Add("@Qte", qte);
-                                    cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text));
+                                    cmd.Parameters.AddWithValue("@Peremption", Convert.ToDateTime(txtdateperemption.Text).Date);
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
-                                    cmd.Parameters.AddWithValue("@lsfabrication", Convert.ToDateTime(DateTime.Now));
+                                    cmd.Parameters.AddWithValue("@lsfabrication", Convert.ToDateTime(DateTime.Now).Date);
                                     cmd.Parameters.AddWithValue("@user", cbUserCreation.Text);
                                     cmd.Parameters.AddWithValue("@lscomplement", txtRefs.Text);
                                     cmd.Parameters.AddWithValue("@dlnoin", DL_NoIn);

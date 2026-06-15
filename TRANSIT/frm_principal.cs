@@ -351,8 +351,8 @@ namespace TRANSIT
                     INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
                     INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
                     LEFT JOIN F_LOTSERIE AS lot 
-                       ON lot.DL_NoOut = doc.DL_No 
-                       AND lot.AR_Ref = doc.AR_Ref
+                       ON lot.AR_Ref = doc.AR_Ref
+                       AND lot.LS_Peremption <>'1753-01-01 00:00:00.000'
                     WHERE doc.DO_Piece = @DoPiece
                       AND doc.DL_Qte IS NOT NULL
                       AND doc.DL_Qte <> 0 
