@@ -23,6 +23,7 @@ using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using static DevExpress.XtraEditors.RoundedSkinPanel;
 
@@ -341,24 +342,31 @@ namespace TRANSIT
                         FORMAT(GETDATE(), 'ddMMyy') AS DO_Date,
                         doc.AR_Ref,
                         doc.DL_Design,
-                        CAST(doc.DL_Qte AS DECIMAL(24,6)) AS DL_Qte,
+                        CAST(doc.DL_Qte AS DECIMAL(24, 6)) AS DL_Qte,
                         lot.LS_NoSerie,
                         f.DE_Intitule,
-                        lot.LS_PEREMPTION,
+                        CASE 
+                            WHEN lot.LS_Peremption IS NOT NULL 
+                             AND lot.LS_Peremption <> CAST('1753-01-01' AS DATETIME)
+                            THEN CAST(lot.LS_Peremption AS DATE)
+                            ELSE CAST('2026-12-31' AS DATE)
+                        END AS LS_Peremption,
                         tete.DO_Tiers,
                         doc.DL_No
                     FROM F_DOCLIGNE AS doc
                     INNER JOIN F_DEPOT AS f ON f.DE_NO = doc.DE_No
-                    INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece=doc.Do_Piece
-                    LEFT JOIN F_LOTSERIE AS lot 
-                       ON lot.AR_Ref = doc.AR_Ref
-                       AND lot.LS_Peremption <>'1753-01-01 00:00:00.000'
+                    INNER JOIN  F_DOCENTETE AS tete ON tete.DO_Piece = doc.Do_Piece
+                    LEFT JOIN F_LOTSERIE AS lot
+                       ON lot.DL_NoOut = doc.DL_No
+                       AND lot.AR_Ref = doc.AR_Ref
+                       AND lot.LS_Peremption<>'1753-01-01 00:00:00.000'
                     WHERE doc.DO_Piece = @DoPiece
                       AND doc.DL_Qte IS NOT NULL
-                      AND doc.DL_Qte <> 0 
-                      AND (doc.DL_DESIGN <> '' and doc.DL_DESIGN IS NOT NULL)
+                      AND doc.DL_Qte<> 0
+                      AND(doc.DL_DESIGN<> '' and doc.DL_DESIGN IS NOT NULL)
                     ";
-                      
+
+                    
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
@@ -544,26 +552,7 @@ namespace TRANSIT
 
                             string cellValueperemption = dgSource.Rows[i].Cells[9].Value?.ToString();
 
-                            // Affecter la valeur brute à frm_trait
-                            string dateTexte = !string.IsNullOrWhiteSpace(cellValueperemption)
-                                ? cellValueperemption
-                                : $"{DateTime.Now.Year}-12-31";
-
-                            // Parser depuis dateTexte (pas depuis frm_trait.txtdateperemption.Text)
-                            if (DateTime.TryParseExact(
-                                    dateTexte,
-                                    "yyyy-MM-dd",
-                                    CultureInfo.InvariantCulture,
-                                    DateTimeStyles.None,
-                                    out DateTime date))
-                            {
-                                frm_trait.txtdateperemption.Text = date.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                            }
-                            else
-                            {
-                                frm_trait.txtdateperemption.Text = $"{DateTime.Now.Year}-12-31 00:00:00.000";
-                            }
-
+                            frm_trait.txtdateperemption.Text = cellValueperemption;
 
                             frm_trait.cbUserCreation.Text = cbCreation;
                             if (i == 0)
