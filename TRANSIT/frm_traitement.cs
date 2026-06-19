@@ -176,9 +176,9 @@ namespace TRANSIT
 
                                     cmd.CommandText = @"
                                     INSERT INTO F_LotSerie
-                                    (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No,LS_Fabrication,cbCreationUser,DL_NoIn,LS_LotEpuise,LS_MvtStock,DL_NoOut,LS_Complement,LS_QteRes)
+                                    (AR_Ref, LS_NoSerie, LS_Qte, LS_QteRestant, LS_Peremption, DE_No,LS_Fabrication,cbCreationUser,DL_NoIn,LS_LotEpuise,LS_MvtStock,DL_NoOut,LS_QteRes)
                                     VALUES
-                                    (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No,@lsfabrication, @user,@dlnoin,0,1,0,@lscomplement,0)";
+                                    (@AR_Ref, @LS_NoSerie, @Qte, @Qte, @Peremption, @DE_No,@lsfabrication, @user,@dlnoin,0,1,0,0)";
                                    
                                     cmd.Parameters.AddWithValue("@AR_Ref", txtreference.Text);
                                     cmd.Parameters.AddWithValue("@LS_NoSerie", txtLot.Text);
@@ -187,7 +187,7 @@ namespace TRANSIT
                                     cmd.Parameters.AddWithValue("@DE_No", recuperer_depot(txtdepot1.Text));
                                     cmd.Parameters.AddWithValue("@lsfabrication", Convert.ToDateTime(DateTime.Now).Date);
                                     cmd.Parameters.AddWithValue("@user", cbUserCreation.Text);
-                                    cmd.Parameters.AddWithValue("@lscomplement", txtRefs.Text);
+                                    //cmd.Parameters.AddWithValue("@lscomplement", txtRefs.Text);
                                     cmd.Parameters.AddWithValue("@dlnoin", DL_NoIn);
 
                                     cmd.ExecuteNonQuery();
