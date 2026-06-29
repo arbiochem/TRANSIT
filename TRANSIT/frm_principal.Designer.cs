@@ -443,7 +443,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private System.Windows.Forms.ComboBox cmbBase;
         private DevExpress.XtraEditors.SimpleButton btn_lister;
-        private System.Windows.Forms.ComboBox cmbBase1;
+        public System.Windows.Forms.ComboBox cmbBase1;
         private DevExpress.XtraEditors.LabelControl labelControl4;
         public DevExpress.XtraEditors.LabelControl lblrecup;
         private DevExpress.XtraEditors.TextEdit txtTDD;
