@@ -50,7 +50,6 @@
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -59,6 +58,7 @@
             this.layoutControlItem11 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem12 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataLayoutControl1)).BeginInit();
             this.dataLayoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtligne.Properties)).BeginInit();
@@ -78,7 +78,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).BeginInit();
@@ -87,6 +86,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
             this.SuspendLayout();
             // 
             // dataLayoutControl1
@@ -123,6 +123,7 @@
             // 
             // txtligne
             // 
+            this.txtligne.EditValue = "";
             this.txtligne.Enabled = false;
             this.txtligne.Location = new System.Drawing.Point(137, 116);
             this.txtligne.Name = "txtligne";
@@ -309,26 +310,6 @@
             this.layoutControlItem1.Text = "Date de péremption";
             this.layoutControlItem1.TextSize = new System.Drawing.Size(113, 16);
             // 
-            // layoutControlItem6
-            // 
-            this.layoutControlItem6.AppearanceItemCaption.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.layoutControlItem6.AppearanceItemCaption.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.layoutControlItem6.AppearanceItemCaption.ForeColor = System.Drawing.Color.White;
-            this.layoutControlItem6.AppearanceItemCaption.Options.UseBackColor = true;
-            this.layoutControlItem6.AppearanceItemCaption.Options.UseFont = true;
-            this.layoutControlItem6.AppearanceItemCaption.Options.UseForeColor = true;
-            this.layoutControlItem6.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
-            this.layoutControlItem6.Control = this.labelControl1;
-            this.layoutControlItem6.CustomizationFormText = "MODIFICATION";
-            this.layoutControlItem6.Location = new System.Drawing.Point(0, 260);
-            this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(395, 20);
-            this.layoutControlItem6.Text = "MODIFICATION";
-            this.layoutControlItem6.TextAlignMode = DevExpress.XtraLayout.TextAlignModeItem.CustomSize;
-            this.layoutControlItem6.TextSize = new System.Drawing.Size(222, 16);
-            this.layoutControlItem6.TextToControlDistance = 5;
-            // 
             // layoutControlItem8
             // 
             this.layoutControlItem8.Control = this.txtligne;
@@ -413,6 +394,26 @@
             this.layoutControlItem13.Text = "CBUserCreation";
             this.layoutControlItem13.TextSize = new System.Drawing.Size(113, 16);
             // 
+            // layoutControlItem6
+            // 
+            this.layoutControlItem6.AppearanceItemCaption.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.layoutControlItem6.AppearanceItemCaption.Font = new System.Drawing.Font("Verdana", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.layoutControlItem6.AppearanceItemCaption.ForeColor = System.Drawing.Color.White;
+            this.layoutControlItem6.AppearanceItemCaption.Options.UseBackColor = true;
+            this.layoutControlItem6.AppearanceItemCaption.Options.UseFont = true;
+            this.layoutControlItem6.AppearanceItemCaption.Options.UseForeColor = true;
+            this.layoutControlItem6.ContentHorzAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.layoutControlItem6.ContentVertAlignment = DevExpress.Utils.VertAlignment.Center;
+            this.layoutControlItem6.Control = this.labelControl1;
+            this.layoutControlItem6.CustomizationFormText = "MODIFICATION";
+            this.layoutControlItem6.Location = new System.Drawing.Point(0, 260);
+            this.layoutControlItem6.Name = "layoutControlItem6";
+            this.layoutControlItem6.Size = new System.Drawing.Size(395, 20);
+            this.layoutControlItem6.Text = "MODIFICATION";
+            this.layoutControlItem6.TextAlignMode = DevExpress.XtraLayout.TextAlignModeItem.CustomSize;
+            this.layoutControlItem6.TextSize = new System.Drawing.Size(222, 16);
+            this.layoutControlItem6.TextToControlDistance = 5;
+            // 
             // frm_traitement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -444,7 +445,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).EndInit();
@@ -453,6 +453,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
             this.ResumeLayout(false);
 
         }

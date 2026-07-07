@@ -633,6 +633,48 @@ namespace TRANSIT
 
         private void btn_save_Click(object sender, EventArgs e)
         {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionSource2))
+                {
+                    con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = con;
+
+                        try
+                        {
+                            cmd.CommandText = "DISABLE TRIGGER ALL ON F_LOTSERIE";
+                            cmd.ExecuteNonQuery();
+
+                            cmd.CommandText = @"
+                            UPDATE F_LOTSERIE
+                            SET LS_Peremption = @LS_Peremption 
+                            WHERE LS_Peremption = @lsperemps AND AR_Ref in ('ALIM0035D','ALIM0065')";
+                            cmd.Parameters.Clear();
+                            cmd.Parameters.Add("@LS_Peremption", SqlDbType.DateTime).Value = new DateTime(2026, 12, 31);
+                            cmd.Parameters.Add("@lsperemps", SqlDbType.DateTime).Value = new DateTime(1753, 1, 1);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                        finally
+                        {
+                            cmd.CommandText = "ENABLE TRIGGER ALL ON F_LOTSERIE";
+                            cmd.Parameters.Clear();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string details = $"Message: {ex.Message}\n";
+
+                MessageBox.Show(details, "Erreur détaillée");
+                MessageBox.Show(ex.Message, "Erreur");
+            }
+
             string dossier = AppDomain.CurrentDomain.BaseDirectory;
             Directory.CreateDirectory(dossier);
 

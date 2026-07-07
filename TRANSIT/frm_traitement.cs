@@ -192,11 +192,13 @@ namespace TRANSIT
 
                                     cmd.ExecuteNonQuery();
 
-
+                                    
                                     cmd.CommandText = @"
                                     ALTER TABLE F_LotSerie CHECK CONSTRAINT ALL; ";
                                     cmd.ExecuteNonQuery();
                                     cmd.Parameters.Clear();
+
+
 
                                     //ARTSTOCK
                                     cmd.CommandText = @"
@@ -303,51 +305,7 @@ namespace TRANSIT
                 }
 
                 //LS_Peremption 1753-01-01
-                try
-                {
-                    using (SqlConnection con = new SqlConnection(_frmParent.connectionSource2))
-                    {
-                        con.Open();
-
-                        using (SqlCommand cmd = new SqlCommand())
-                        {
-                            cmd.Connection = con;
-                            cmd.CommandText = @"
-                                DISABLE TRIGGER ALL ON F_LOTSERIE;
-                                ALTER TABLE F_LOTSERIE NOCHECK CONSTRAINT ALL; ";
-                            cmd.ExecuteNonQuery();
-
-
-                            try
-                            {
-
-                                cmd.CommandText = @"
-                                                 UPDATE F_LOTSERIE
-                                                 SET LS_Peremption = @LS_Peremption WHERE LS_Peremption=@lsperemps";
-
-                                cmd.Parameters.Clear();
-                                cmd.Parameters.AddWithValue("LS_Peremption", "2026-12-31 00:00:00.000");
-                                cmd.Parameters.AddWithValue("@lsperemps", "1753-01-01 00:00:00.000");
-
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, "Erreur");
-                            }
-
-
-                            cmd.CommandText = @"
-                                ENABLE TRIGGER ALL ON F_LOTSERIE;
-                                ALTER TABLE F_LOTSERIE CHECK CONSTRAINT ALL; ";
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Erreur");
-                }
+                
 
                 _frmParent.lblrecup.Text = "";
                 _frmParent.lblrecup.Text = txttype.Text + ";" + txtligne.Text + ";" + txtqte1.Text + ";"+txtLot.Text+";"+ lotserie+";"+txtRefs.Text+";"+txtdateperemption.Text;
